@@ -44,7 +44,7 @@ function loadScript(): Promise<void> {
     if (existing) {
       existing.addEventListener("load", () => resolve());
       existing.addEventListener("error", () => reject(new Error("panda script")));
-      if ((window as Record<string, unknown>)["PandaPlayer"]) resolve();
+      if ((window as unknown as Record<string, unknown>)["PandaPlayer"]) resolve();
       return;
     }
     const script = document.createElement("script");
