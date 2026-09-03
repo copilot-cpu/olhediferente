@@ -15,6 +15,7 @@ import { Route as AulaRouteImport } from './routes/aula'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminCaptacaoRouteImport } from './routes/_authenticated/admin.captacao'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,18 +46,26 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminCaptacaoRoute =
+  AuthenticatedAdminCaptacaoRouteImport.update({
+    id: '/captacao',
+    path: '/captacao',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
+  '/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -66,13 +75,14 @@ export interface FileRoutesById {
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/aula' | '/auth' | '/admin' | '/admin/'
+  fullPaths: '/' | '/aula' | '/auth' | '/admin' | '/admin/captacao' | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aula' | '/auth' | '/admin'
+  to: '/' | '/aula' | '/auth' | '/admin/captacao' | '/admin'
   id:
     | '__root__'
     | '/'
@@ -80,6 +90,7 @@ export interface FileRouteTypes {
     | '/aula'
     | '/auth'
     | '/_authenticated/admin'
+    | '/_authenticated/admin/captacao'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -134,14 +145,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/captacao': {
+      id: '/_authenticated/admin/captacao'
+      path: '/captacao'
+      fullPath: '/admin/captacao'
+      preLoaderRoute: typeof AuthenticatedAdminCaptacaoRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCaptacaoRoute: typeof AuthenticatedAdminCaptacaoRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCaptacaoRoute: AuthenticatedAdminCaptacaoRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
