@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Container, GoldRule } from "@/components/ds/container";
+import { Container } from "@/components/ds/container";
 import { IrisGlow } from "@/components/ds/iris";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { BroadcastActivity } from "@/components/webinar/broadcast-activity";
+import { BroadcastStatus } from "@/components/webinar/broadcast-status";
+import { OfferRevealRegion } from "@/components/webinar/offer-reveal-region";
+import { WebinarPlayer } from "@/components/webinar/webinar-player";
+import { useWebinarSettings } from "@/lib/webinar-settings";
 
 const title = "Transmissão — OLHE DIFERENTE";
 const description =
-  "Sala de transmissão da aula OLHE DIFERENTE, do Professor Marcos Dias. Estrutura inicial.";
+  "Sala de transmissão da aula online OLHE DIFERENTE, com o Professor Marcos Dias.";
 
 export const Route = createFileRoute("/aula")({
   head: () => ({
@@ -16,45 +19,87 @@ export const Route = createFileRoute("/aula")({
       { name: "description", content: description },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: WebinarPage,
 });
 
 function WebinarPage() {
+  const { settings } = useWebinarSettings();
+
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden bg-background">
       <IrisGlow />
-      <Container width="wide" className="relative py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <span className="font-display text-sm uppercase tracking-[0.3em] text-primary">
+
+      <header className="relative border-b border-border/50">
+        <Container width="wide" className="flex items-center justify-between py-4">
+          <span className="font-display text-xs uppercase tracking-[0.3em] text-primary sm:text-sm">
             Olhe Diferente
           </span>
-          <Badge variant="outline">Transmissão</Badge>
-        </div>
-        <GoldRule className="my-8" />
+          <span className="hidden font-sans text-[0.68rem] uppercase tracking-[0.24em] text-muted-foreground sm:inline">
+            Aula online
+          </span>
+        </Container>
+      </header>
 
-        <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-          <Card className="overflow-hidden border-border/70 bg-card/70">
-            <div className="flex aspect-video items-center justify-center border-b border-border/60 bg-background/60">
-              <p className="text-sm text-muted-foreground">Área do player</p>
+      <Container width="wide" className="relative pb-16 pt-8 sm:pt-10">
+        <div className="mx-auto max-w-[1160px]">
+          <div className="text-center">
+            <p className="font-sans text-[0.62rem] uppercase tracking-[0.28em] text-primary sm:text-[0.68rem]">
+              Sua inscrição está confirmada
+            </p>
+            <h1 className="mt-3 font-display text-2xl leading-tight text-foreground sm:text-3xl">
+              Sua vaga para a aula{" "}
+              <span className="text-primary">{settings.lessonTitle}</span> está confirmada.
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Agora é só dar o play e aproveitar.
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
+            <BroadcastStatus label={settings.broadcastLabel} />
+            <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              {settings.lessonTitle} · com o Professor {settings.teacherName} ·{" "}
+              {settings.lessonSubtitle}
+            </p>
+          </div>
+
+          <WebinarPlayer
+            className="mt-6 sm:mt-8"
+            embedUrl={settings.videoEmbedUrl}
+            title={`${settings.lessonTitle} — aula online`}
+          />
+
+          <dl className="mt-4 grid gap-3 rounded-lg border border-border/60 bg-card/40 px-5 py-4 sm:grid-cols-3">
+            <div>
+              <dt className="text-overline">Status</dt>
+              <dd className="mt-1 text-sm text-foreground">{settings.broadcastLabel}</dd>
             </div>
-            <CardContent className="p-6">
-              <h1 className="text-heading text-foreground">Sala de transmissão</h1>
-              <p className="text-lede mt-3 text-base">
-                Estrutura reservada para o player, a linha do tempo de eventos e a oferta.
-              </p>
-            </CardContent>
-          </Card>
+            <div>
+              <dt className="text-overline">Professor</dt>
+              <dd className="mt-1 text-sm text-foreground">{settings.teacherName}</dd>
+            </div>
+            <div>
+              <dt className="text-overline">Formato</dt>
+              <dd className="mt-1 text-sm text-foreground">{settings.lessonSubtitle}</dd>
+            </div>
+          </dl>
 
-          <Card className="border-border/70 bg-card/70">
-            <CardContent className="p-6">
-              <p className="text-overline">Painel lateral</p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Espaço reservado para interações da aula.
-              </p>
-            </CardContent>
-          </Card>
+          <BroadcastActivity className="mt-3" />
+
+          <div className="mt-5 space-y-1 text-center">
+            <p className="text-sm text-foreground/90">
+              Reserve este momento para acompanhar a aula com atenção.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Durante a apresentação, algumas informações poderão aparecer abaixo do vídeo.
+            </p>
+          </div>
+
+          <OfferRevealRegion offerUnlocked={false} />
         </div>
       </Container>
     </main>
