@@ -114,7 +114,7 @@ export function TextField({
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  rows?: number;
+  rows?: number | undefined;
   type?: string;
   disabled?: boolean;
   className?: string;

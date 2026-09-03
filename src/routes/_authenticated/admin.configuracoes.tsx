@@ -63,7 +63,7 @@ function AdminSettingsPage() {
         .upsert(
           {
             key: SITE_SETTINGS_KEY,
-            value: value as unknown as Record<string, unknown>,
+            value: value as unknown as never,
             is_public: true,
           },
           { onConflict: "key" },
