@@ -89,7 +89,7 @@ function WebinarPage() {
             className="mt-6 sm:mt-8"
             embedUrl={playerUrl}
             title={`${settings.lessonTitle} — aula online`}
-            onAdapterReady={(a) => { (window as unknown as Record<string, unknown>).__adapter = a; setAdapter(a); }}
+            onAdapterReady={setAdapter}
           />
 
           <dl className="mt-4 grid gap-3 rounded-lg border border-border/60 bg-card/40 px-5 py-4 sm:grid-cols-3">
