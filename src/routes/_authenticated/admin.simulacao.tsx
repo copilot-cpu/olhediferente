@@ -198,11 +198,17 @@ function AdminSimulacaoPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => remove.mutate(event.id)}
-                    disabled={remove.isPending}
+                    onClick={() => setDraft({ ...toDraft(event), id: null })}
                   >
-                    Excluir
+                    Duplicar
                   </Button>
+                  <ConfirmDelete
+                    title="Excluir evento?"
+                    description={`O evento de ${event.name} será removido.`}
+                    disabled={remove.isPending}
+                    onConfirm={() => remove.mutate(event.id)}
+                  />
+
                 </li>
               ))}
             </ul>
