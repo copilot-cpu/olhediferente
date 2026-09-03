@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import {
+  defaultViewerCurve,
+  normalizeViewerCurve,
+  type ViewerCheckpoint,
+} from "@/lib/viewer-curve";
 
 export const WEBINAR_SETTINGS_KEY = "main";
 
@@ -47,6 +52,10 @@ export const webinarDefaults: WebinarSettings = {
   simulationMode: false,
   disableForward: true,
   playbackSpeed: 1,
+  viewerCounterEnabled: false,
+  viewerSimulationEnabled: false,
+  viewerLabel: "pessoas acompanhando",
+  viewerCurve: defaultViewerCurve,
 };
 
 /** Converte "HH:MM:SS" (ou "MM:SS") em segundos. Retorna null se inválido. */
@@ -146,6 +155,13 @@ export function mapRow(row: Row | null | undefined): WebinarSettings {
       typeof config["playback_speed"] === "number" && (config["playback_speed"] as number) > 0
         ? (config["playback_speed"] as number)
         : webinarDefaults.playbackSpeed,
+    viewerCounterEnabled: config["viewer_counter_enabled"] === true,
+    viewerSimulationEnabled: config["viewer_simulation_enabled"] === true,
+    viewerLabel: str("viewer_label", webinarDefaults.viewerLabel),
+    viewerCurve: (() => {
+      const curve = normalizeViewerCurve(config["viewer_curve"]);
+      return curve.length ? curve : webinarDefaults.viewerCurve;
+    })(),
   };
 }
 
