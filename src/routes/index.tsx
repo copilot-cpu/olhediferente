@@ -41,11 +41,11 @@ function scrollToForm() {
 
 function Headline({ text, highlight }: { text: string; highlight?: string }) {
   if (!highlight || !text.includes(highlight)) {
-    return <h1 className="text-display text-foreground">{text}</h1>;
+    return <h1 className="text-hero text-foreground">{text}</h1>;
   }
   const [before, after] = text.split(highlight);
   return (
-    <h1 className="text-display text-foreground">
+    <h1 className="text-hero text-foreground">
       {before}
       <em className="not-italic font-display italic text-primary">{highlight}</em>
       {after}
@@ -71,20 +71,32 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 }
 
 function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
-  if (src) {
-    return (
-      <figure className="relative w-full max-w-lg overflow-hidden rounded-full ring-1 ring-primary/25 shadow-[var(--shadow-elevated)]">
-        <img src={src} alt={alt} loading="lazy" className="aspect-square w-full object-cover" />
-      </figure>
-    );
-  }
   return (
-    <div className="relative flex items-center justify-center">
-      <IrisMark size={380} className="max-w-full animate-[spin_120s_linear_infinite] motion-reduce:animate-none" />
-      <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_45%,var(--background)_92%)]" />
+    <div className="relative isolate w-full">
+      {src ? (
+        <figure className="relative mx-auto aspect-square w-full max-w-[34rem] overflow-hidden rounded-full ring-1 ring-primary/20 lg:max-w-none">
+          <img src={src} alt={alt} className="h-full w-full object-cover" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_38%,color-mix(in_oklab,var(--background)_88%,transparent)_100%)]"
+          />
+        </figure>
+      ) : (
+        <div className="relative flex items-center justify-center">
+          <IrisMark
+            size={560}
+            className="mx-auto w-full max-w-[19rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none sm:max-w-[24rem] lg:max-w-[30rem]"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_40%,var(--background)_88%)]"
+          />
+        </div>
+      )}
     </div>
   );
 }
+
 
 function CapturePage() {
   const { block, field } = useCaptureContent();
@@ -110,24 +122,26 @@ function CapturePage() {
       </Container>
 
       {/* HERO */}
-      <Section id="inscricao" className="relative pt-6">
+      <Section id="inscricao" className="relative pt-2 pb-12 sm:pt-4 lg:pt-6 lg:pb-20">
         <Container width="wide">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <Reveal>
+          <div className="grid items-center gap-10 lg:grid-cols-[55fr_45fr] lg:gap-14">
+            <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-5">
+              <div className="mt-4 max-w-[22rem] sm:max-w-[34rem] lg:max-w-[36rem]">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 max-w-xl">{hero.body}</p>
+              <p className="text-lede mt-6 max-w-[38rem] lg:text-[1.075rem] lg:leading-[1.6]">
+                {hero.body}
+              </p>
 
-              <div className="mt-8">
+              <div className="mt-7">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-9 max-w-md" />
+              <GoldRule className="my-7 max-w-md" />
 
               <div className="max-w-md rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
@@ -142,7 +156,8 @@ function CapturePage() {
               </div>
             </Reveal>
 
-            <Reveal delay={120} className="flex justify-center lg:justify-end">
+            <Reveal delay={120} className="min-w-0 lg:pl-4">
+
               <IrisVisual
                 src={hero.media_url}
                 alt="Macrofotografia de uma íris humana em detalhe"
