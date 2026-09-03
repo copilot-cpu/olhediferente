@@ -41,11 +41,11 @@ function scrollToForm() {
 
 function Headline({ text, highlight }: { text: string; highlight?: string }) {
   if (!highlight || !text.includes(highlight)) {
-    return <h1 className="text-display text-foreground">{text}</h1>;
+    return <h1 className="text-hero text-foreground">{text}</h1>;
   }
   const [before, after] = text.split(highlight);
   return (
-    <h1 className="text-display text-foreground">
+    <h1 className="text-hero text-foreground">
       {before}
       <em className="not-italic font-display italic text-primary">{highlight}</em>
       {after}
@@ -71,20 +71,32 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 }
 
 function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
-  if (src) {
-    return (
-      <figure className="relative w-full max-w-lg overflow-hidden rounded-full ring-1 ring-primary/25 shadow-[var(--shadow-elevated)]">
-        <img src={src} alt={alt} loading="lazy" className="aspect-square w-full object-cover" />
-      </figure>
-    );
-  }
   return (
-    <div className="relative flex items-center justify-center">
-      <IrisMark size={380} className="max-w-full animate-[spin_120s_linear_infinite] motion-reduce:animate-none" />
-      <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_45%,var(--background)_92%)]" />
+    <div className="relative isolate w-full">
+      {src ? (
+        <figure className="relative mx-auto aspect-square w-full max-w-[34rem] overflow-hidden rounded-full ring-1 ring-primary/20 lg:max-w-none">
+          <img src={src} alt={alt} className="h-full w-full object-cover" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_38%,color-mix(in_oklab,var(--background)_88%,transparent)_100%)]"
+          />
+        </figure>
+      ) : (
+        <div className="relative flex items-center justify-center">
+          <IrisMark
+            size={560}
+            className="w-full max-w-[30rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none lg:max-w-[36rem]"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_40%,var(--background)_88%)]"
+          />
+        </div>
+      )}
     </div>
   );
 }
+
 
 function CapturePage() {
   const { block, field } = useCaptureContent();
