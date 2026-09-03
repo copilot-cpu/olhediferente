@@ -3,10 +3,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { AdminShell } from "@/components/admin/admin-shell";
+import { ConfirmDelete } from "@/components/admin/ui";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ds/feedback";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -57,6 +59,12 @@ function AdminSimulacaoPage() {
   const queryClient = useQueryClient();
   const eventsQuery = useAdminWebinarEvents();
   const [draft, setDraft] = useState<Draft>(emptyDraft);
+  const [sequence, setSequence] = useState({
+    start: "01:03:45",
+    count: 5,
+    step: 5,
+    names: "",
+  });
   const [feedback, setFeedback] = useState<{ type: "ok" | "error"; message: string } | null>(null);
 
   const invalidate = () => {
