@@ -294,6 +294,70 @@ function AdminSimulacaoPage() {
           </div>
         </form>
       </div>
+
+      <section className="mt-8 space-y-4 rounded-lg border border-border/60 p-4">
+        <div>
+          <h2 className="text-overline">Criar sequência</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Cria vários eventos de uma vez, espaçados igualmente a partir de um horário.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="seq-start">Começa em (HH:MM:SS)</Label>
+            <Input
+              id="seq-start"
+              value={sequence.start}
+              onChange={(e) => setSequence((s) => ({ ...s, start: e.target.value }))}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="seq-count">Quantidade</Label>
+            <Input
+              id="seq-count"
+              type="number"
+              min={1}
+              max={50}
+              value={sequence.count}
+              onChange={(e) => setSequence((s) => ({ ...s, count: Number(e.target.value) }))}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="seq-step">Intervalo (segundos)</Label>
+            <Input
+              id="seq-step"
+              type="number"
+              min={1}
+              value={sequence.step}
+              onChange={(e) => setSequence((s) => ({ ...s, step: Number(e.target.value) }))}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="seq-names">Nomes (um por linha)</Label>
+          <Textarea
+            id="seq-names"
+            rows={4}
+            value={sequence.names}
+            onChange={(e) => setSequence((s) => ({ ...s, names: e.target.value }))}
+          />
+        </div>
+
+        <Button
+          type="button"
+          variant="quiet"
+          disabled={createSequence.isPending}
+          onClick={() => {
+            setFeedback(null);
+            createSequence.mutate(sequence);
+          }}
+        >
+          {createSequence.isPending ? "Criando…" : "CRIAR SEQUÊNCIA"}
+        </Button>
+      </section>
+
     </AdminShell>
   );
 }
