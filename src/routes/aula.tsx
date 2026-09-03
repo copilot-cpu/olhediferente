@@ -9,6 +9,7 @@ import { OfferSection } from "@/components/offer/offer-section";
 import { OfferRevealRegion } from "@/components/webinar/offer-reveal-region";
 import { PurchaseToast } from "@/components/webinar/purchase-toast";
 import { WebinarPlayer } from "@/components/webinar/webinar-player";
+import { useSimulatedAudience } from "@/hooks/use-simulated-audience";
 import { useWebinarEngine } from "@/hooks/use-webinar-engine";
 import type { PandaPlayerAdapter } from "@/lib/panda-player";
 import { useWebinarEvents } from "@/lib/webinar-events";
@@ -46,7 +47,18 @@ function WebinarPage() {
     [settings.videoEmbedUrl, settings.disableForward, settings.playbackSpeed],
   );
 
-  const { offerUnlocked, visibleToast } = useWebinarEngine({ adapter, settings, events });
+  const { offerUnlocked, visibleToast, currentTime } = useWebinarEngine({
+    adapter,
+    settings,
+    events,
+  });
+
+  // Audiência simulada: derivada apenas do currentTime real do player.
+  const viewerCount = useSimulatedAudience({
+    enabled: settings.viewerCounterEnabled && settings.viewerSimulationEnabled,
+    currentTime,
+    curve: settings.viewerCurve,
+  });
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-background">
@@ -80,6 +92,12 @@ function WebinarPage() {
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
             <BroadcastStatus label={settings.broadcastLabel} />
+            <BroadcastActivity
+              enabled={settings.viewerCounterEnabled}
+              viewerCount={viewerCount}
+              label={settings.viewerLabel}
+              viewerSource="simulation"
+            />
             <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">
               {settings.lessonTitle} · com o Professor {settings.teacherName} ·{" "}
               {settings.lessonSubtitle}
@@ -107,8 +125,6 @@ function WebinarPage() {
               <dd className="mt-1 text-sm text-foreground">{settings.lessonSubtitle}</dd>
             </div>
           </dl>
-
-          <BroadcastActivity className="mt-3" />
 
           <div className="mt-5 space-y-1 text-center">
             <p className="text-sm text-foreground/90">

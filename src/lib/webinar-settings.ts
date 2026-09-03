@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import {
+  defaultViewerCurve,
+  normalizeViewerCurve,
+  type ViewerCheckpoint,
+} from "@/lib/viewer-curve";
 
 export const WEBINAR_SETTINGS_KEY = "main";
 
@@ -23,6 +28,17 @@ export type WebinarSettings = {
   disableForward: boolean;
   /** Velocidade padrão do player (`config.playback_speed`). Nesta versão sempre 1. */
   playbackSpeed: number;
+  /** Exibe a camada de atividade/audiência (`config.viewer_counter_enabled`). */
+  viewerCounterEnabled: boolean;
+  /**
+   * Usa audiência SIMULADA a partir da curva (`config.viewer_simulation_enabled`).
+   * Independente de `simulation_mode` (notificações de compra).
+   */
+  viewerSimulationEnabled: boolean;
+  /** Texto ao lado do número (`config.viewer_label`). */
+  viewerLabel: string;
+  /** Curva de audiência simulada (`config.viewer_curve`). */
+  viewerCurve: ViewerCheckpoint[];
 };
 
 export const webinarDefaults: WebinarSettings = {
@@ -36,6 +52,10 @@ export const webinarDefaults: WebinarSettings = {
   simulationMode: false,
   disableForward: true,
   playbackSpeed: 1,
+  viewerCounterEnabled: false,
+  viewerSimulationEnabled: false,
+  viewerLabel: "pessoas acompanhando",
+  viewerCurve: defaultViewerCurve,
 };
 
 /** Converte "HH:MM:SS" (ou "MM:SS") em segundos. Retorna null se inválido. */
@@ -135,6 +155,13 @@ export function mapRow(row: Row | null | undefined): WebinarSettings {
       typeof config["playback_speed"] === "number" && (config["playback_speed"] as number) > 0
         ? (config["playback_speed"] as number)
         : webinarDefaults.playbackSpeed,
+    viewerCounterEnabled: config["viewer_counter_enabled"] === true,
+    viewerSimulationEnabled: config["viewer_simulation_enabled"] === true,
+    viewerLabel: str("viewer_label", webinarDefaults.viewerLabel),
+    viewerCurve: (() => {
+      const curve = normalizeViewerCurve(config["viewer_curve"]);
+      return curve.length ? curve : webinarDefaults.viewerCurve;
+    })(),
   };
 }
 
