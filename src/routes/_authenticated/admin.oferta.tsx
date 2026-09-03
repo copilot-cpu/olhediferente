@@ -110,7 +110,7 @@ function AdminOfferPage() {
         price_label: block.price_label?.trim() || null,
         guarantee: block.guarantee?.trim() || null,
         checkout_url: block.checkout_url?.trim() || null,
-        bonuses: (block.data ?? {}) as Record<string, unknown>,
+        bonuses: (block.data ?? {}) as unknown as never,
         is_active: true,
       }));
       const { error } = await supabase

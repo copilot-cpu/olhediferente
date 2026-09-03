@@ -93,7 +93,7 @@ function AdminCapturePage() {
         subtitle: block.subtitle?.trim() || null,
         body: block.body?.trim() || null,
         media_url: block.media_url?.trim() || null,
-        data: (block.data ?? {}) as Record<string, unknown>,
+        data: (block.data ?? {}) as unknown as never,
         is_active: true,
       }));
       const { error } = await supabase
