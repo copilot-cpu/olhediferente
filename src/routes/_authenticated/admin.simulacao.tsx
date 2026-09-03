@@ -3,10 +3,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { AdminShell } from "@/components/admin/admin-shell";
+import { ConfirmDelete } from "@/components/admin/ui";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ds/feedback";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -57,6 +59,12 @@ function AdminSimulacaoPage() {
   const queryClient = useQueryClient();
   const eventsQuery = useAdminWebinarEvents();
   const [draft, setDraft] = useState<Draft>(emptyDraft);
+  const [sequence, setSequence] = useState({
+    start: "01:03:45",
+    count: 5,
+    step: 5,
+    names: "",
+  });
   const [feedback, setFeedback] = useState<{ type: "ok" | "error"; message: string } | null>(null);
 
   const invalidate = () => {
@@ -122,7 +130,46 @@ function AdminSimulacaoPage() {
     onSuccess: invalidate,
   });
 
+  const createSequence = useMutation({
+    mutationFn: async (value: { start: string; count: number; step: number; names: string }) => {
+      const start = hmsToSeconds(value.start);
+      if (start === null) throw new Error("Informe o horário inicial no formato HH:MM:SS.");
+      const names = value.names
+        .split("\n")
+        .map((n) => n.trim())
+        .filter(Boolean);
+      if (names.length === 0) throw new Error("Informe ao menos um nome (um por linha).");
+      const count = Math.min(Math.max(Number(value.count) || 0, 1), 50);
+      const step = Math.max(Number(value.step) || 1, 1);
+
+      const rows = Array.from({ length: count }, (_, index) => ({
+        event_type: "simulation_purchase",
+        title: names[index % names.length] as string,
+        trigger_at_seconds: start + index * step,
+        is_active: true,
+        payload: {
+          message: DEFAULT_PURCHASE_MESSAGE,
+          display_duration: DEFAULT_DISPLAY_DURATION,
+        },
+      }));
+
+      const { error } = await supabase.from("webinar_events").insert(rows);
+      if (error) throw error;
+      return rows.length;
+    },
+    onSuccess: (created) => {
+      setFeedback({ type: "ok", message: `${created} evento(s) criados.` });
+      invalidate();
+    },
+    onError: (error: unknown) =>
+      setFeedback({
+        type: "error",
+        message: error instanceof Error ? error.message : "Não foi possível criar a sequência.",
+      }),
+  });
+
   const events = eventsQuery.data ?? [];
+
 
   return (
     <AdminShell title="Simulação" description="Eventos simulados da aula">
@@ -159,11 +206,17 @@ function AdminSimulacaoPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => remove.mutate(event.id)}
-                    disabled={remove.isPending}
+                    onClick={() => setDraft({ ...toDraft(event), id: null })}
                   >
-                    Excluir
+                    Duplicar
                   </Button>
+                  <ConfirmDelete
+                    title="Excluir evento?"
+                    description={`O evento de ${event.name} será removido.`}
+                    disabled={remove.isPending}
+                    onConfirm={() => remove.mutate(event.id)}
+                  />
+
                 </li>
               ))}
             </ul>
@@ -249,6 +302,70 @@ function AdminSimulacaoPage() {
           </div>
         </form>
       </div>
+
+      <section className="mt-8 space-y-4 rounded-lg border border-border/60 p-4">
+        <div>
+          <h2 className="text-overline">Criar sequência</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Cria vários eventos de uma vez, espaçados igualmente a partir de um horário.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="space-y-2">
+            <Label htmlFor="seq-start">Começa em (HH:MM:SS)</Label>
+            <Input
+              id="seq-start"
+              value={sequence.start}
+              onChange={(e) => setSequence((s) => ({ ...s, start: e.target.value }))}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="seq-count">Quantidade</Label>
+            <Input
+              id="seq-count"
+              type="number"
+              min={1}
+              max={50}
+              value={sequence.count}
+              onChange={(e) => setSequence((s) => ({ ...s, count: Number(e.target.value) }))}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="seq-step">Intervalo (segundos)</Label>
+            <Input
+              id="seq-step"
+              type="number"
+              min={1}
+              value={sequence.step}
+              onChange={(e) => setSequence((s) => ({ ...s, step: Number(e.target.value) }))}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="seq-names">Nomes (um por linha)</Label>
+          <Textarea
+            id="seq-names"
+            rows={4}
+            value={sequence.names}
+            onChange={(e) => setSequence((s) => ({ ...s, names: e.target.value }))}
+          />
+        </div>
+
+        <Button
+          type="button"
+          variant="quiet"
+          disabled={createSequence.isPending}
+          onClick={() => {
+            setFeedback(null);
+            createSequence.mutate(sequence);
+          }}
+        >
+          {createSequence.isPending ? "Criando…" : "CRIAR SEQUÊNCIA"}
+        </Button>
+      </section>
+
     </AdminShell>
   );
 }

@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { useSiteSettings } from "@/lib/site-settings";
 import { useCaptureContent } from "@/lib/capture-content";
 
 const title = "OLHE DIFERENTE — Aula gratuita de Iridologia com o Prof. Marcos Dias";
@@ -100,6 +101,7 @@ function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
 
 function CapturePage() {
   const { block, field } = useCaptureContent();
+  const { settings: site } = useSiteSettings();
 
   const hero = block("hero");
   const form = block("form");
@@ -441,7 +443,7 @@ function CapturePage() {
             Olhe Diferente
           </span>
           <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Professor Marcos Dias
+            {site.footerText || `Professor ${site.teacherName}`}
           </span>
         </Container>
       </footer>

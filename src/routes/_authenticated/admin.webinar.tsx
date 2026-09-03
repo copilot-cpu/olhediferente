@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
 
 import { AdminShell } from "@/components/admin/admin-shell";
-import { LoadingState } from "@/components/ds/feedback";
+import {
+  AdminCard,
+  ConfirmDelete,
+  FieldGrid,
+  PreviewLink,
+  SaveBar,
+  TextField,
+  type Feedback,
+} from "@/components/admin/ui";
+import { ErrorState, LoadingState } from "@/components/ds/feedback";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,36 +36,24 @@ export const Route = createFileRoute("/_authenticated/admin/webinar")({
   component: AdminWebinarPage,
 });
 
+/** "Isso corresponde a X minutos e Y segundos". */
+function describeSeconds(input: string): string | null {
+  const seconds = hmsToSeconds(input);
+  if (seconds === null) return null;
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `Isso corresponde a ${minutes} minuto(s) e ${rest} segundo(s) de vídeo assistido.`;
+}
+
 function AdminWebinarPage() {
   const queryClient = useQueryClient();
   const [form, setForm] = useState(webinarDefaults);
   const [revealInput, setRevealInput] = useState(secondsToHms(webinarDefaults.offerRevealSeconds));
-  const [feedback, setFeedback] = useState<{ type: "ok" | "error"; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<Feedback>(null);
   const [curve, setCurve] = useState<ViewerCheckpoint[]>(webinarDefaults.viewerCurve);
   const [pointTime, setPointTime] = useState("00:00:00");
   const [pointViewers, setPointViewers] = useState("100");
   const [curveError, setCurveError] = useState<string | null>(null);
-
-  const addPoint = () => {
-    setCurveError(null);
-    const seconds = hmsToSeconds(pointTime);
-    if (seconds === null) {
-      setCurveError("Informe o horário no formato HH:MM:SS.");
-      return;
-    }
-    const viewers = Number(pointViewers);
-    if (!Number.isInteger(viewers) || viewers < 0) {
-      setCurveError("A quantidade deve ser um número inteiro maior ou igual a zero.");
-      return;
-    }
-    if (curve.some((point) => point.time === seconds)) {
-      setCurveError("Já existe um ponto neste segundo.");
-      return;
-    }
-    setCurve((points) =>
-      [...points, { time: seconds, viewers }].sort((a, b) => a.time - b.time),
-    );
-  };
 
   const settingsQuery = useQuery({
     queryKey: ["admin-webinar-settings"],
@@ -78,6 +76,25 @@ function AdminWebinarPage() {
       setCurve(mapped.viewerCurve);
     }
   }, [settingsQuery.data]);
+
+  const addPoint = () => {
+    setCurveError(null);
+    const seconds = hmsToSeconds(pointTime);
+    if (seconds === null) {
+      setCurveError("Informe o horário no formato HH:MM:SS.");
+      return;
+    }
+    const viewers = Number(pointViewers);
+    if (!Number.isInteger(viewers) || viewers < 0) {
+      setCurveError("A quantidade deve ser um número inteiro maior ou igual a zero.");
+      return;
+    }
+    if (curve.some((point) => point.time === seconds)) {
+      setCurveError("Já existe um ponto neste segundo.");
+      return;
+    }
+    setCurve((points) => [...points, { time: seconds, viewers }].sort((a, b) => a.time - b.time));
+  };
 
   const save = useMutation({
     mutationFn: async () => {
@@ -122,84 +139,86 @@ function AdminWebinarPage() {
       void queryClient.invalidateQueries({ queryKey: ["admin-webinar-settings"] });
       void queryClient.invalidateQueries({ queryKey: ["webinar-settings"] });
     },
-    onError: (error: unknown) => {
+    onError: (error: unknown) =>
       setFeedback({
         type: "error",
         message: error instanceof Error ? error.message : "Não foi possível salvar.",
-      });
-    },
+      }),
   });
+
+  if (settingsQuery.isLoading) {
+    return (
+      <AdminShell title="Webinar" description="Configurações da transmissão">
+        <LoadingState label="Carregando configurações" />
+      </AdminShell>
+    );
+  }
+
+  if (settingsQuery.isError) {
+    return (
+      <AdminShell title="Webinar" description="Configurações da transmissão">
+        <ErrorState description="Não foi possível carregar as configurações da transmissão." />
+      </AdminShell>
+    );
+  }
+
+  const revealHint = describeSeconds(revealInput);
+  const isTestReveal = (hmsToSeconds(revealInput) ?? 0) < 120;
 
   return (
     <AdminShell title="Webinar" description="Configurações da transmissão">
-      {settingsQuery.isLoading ? (
-        <LoadingState label="Carregando configurações" />
-      ) : (
-        <form
-          className="max-w-xl space-y-5"
-          onSubmit={(event) => {
-            event.preventDefault();
-            setFeedback(null);
-            save.mutate();
-          }}
-        >
-          <div className="space-y-2">
-            <Label htmlFor="video">URL do vídeo Panda</Label>
-            <Input
-              id="video"
-              value={form.videoEmbedUrl}
-              onChange={(e) => setForm((f) => ({ ...f, videoEmbedUrl: e.target.value }))}
-              placeholder="https://player-vz-....tv.pandavideo.com.br/embed/?v=..."
-            />
-          </div>
+      <form
+        className="space-y-8"
+        onSubmit={(event) => {
+          event.preventDefault();
+          setFeedback(null);
+          save.mutate();
+        }}
+      >
+        <div className="flex flex-wrap gap-2">
+          <PreviewLink to="/aula" label="ABRIR AULA" />
+          <PreviewLink to="/admin/preview" label="PRÉ-VISUALIZAR OFERTA" />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="lesson">Título da aula</Label>
-            <Input
-              id="lesson"
+        <AdminCard title="Vídeo" description="Origem e identificação da aula.">
+          <TextField
+            label="URL do vídeo Panda"
+            placeholder="https://player-vz-....tv.pandavideo.com.br/embed/?v=..."
+            value={form.videoEmbedUrl}
+            onChange={(v) => setForm((f) => ({ ...f, videoEmbedUrl: v }))}
+          />
+          <FieldGrid>
+            <TextField
+              label="Título da aula"
               value={form.lessonTitle}
-              onChange={(e) => setForm((f) => ({ ...f, lessonTitle: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, lessonTitle: v }))}
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="teacher">Nome do professor</Label>
-            <Input
-              id="teacher"
+            <TextField
+              label="Nome do professor"
               value={form.teacherName}
-              onChange={(e) => setForm((f) => ({ ...f, teacherName: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, teacherName: v }))}
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="status">Texto de status da transmissão</Label>
-            <Input
-              id="status"
+          </FieldGrid>
+          <FieldGrid>
+            <TextField
+              label="Texto de status da transmissão"
               value={form.broadcastLabel}
-              onChange={(e) => setForm((f) => ({ ...f, broadcastLabel: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, broadcastLabel: v }))}
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="reveal">Tempo de liberação da oferta (HH:MM:SS)</Label>
-            <Input
-              id="reveal"
-              value={revealInput}
-              onChange={(e) => setRevealInput(e.target.value)}
-              placeholder="01:04:00"
-              inputMode="numeric"
+            <TextField
+              label="Formato exibido ao lado do título"
+              value={form.lessonSubtitle}
+              onChange={(v) => setForm((f) => ({ ...f, lessonSubtitle: v }))}
             />
-            <p className="text-xs text-muted-foreground">
-              A oferta só aparece quando o tempo real assistido no player atinge este momento.
-            </p>
-          </div>
+          </FieldGrid>
+        </AdminCard>
 
-          <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3">
+        <AdminCard title="Comportamento do vídeo">
+          <div className="flex items-start justify-between gap-4 rounded-md border border-border/60 px-4 py-3">
             <div className="pr-4">
               <Label htmlFor="forward">Bloquear avanço do vídeo</Label>
               <p className="mt-1 text-xs text-muted-foreground">
-                Usa o parâmetro oficial <code>disableForward</code> do Panda e remove a barra de
-                progresso, mantendo play/pause, volume e tela cheia.
+                Remove a barra de progresso e mantém play/pause, volume e tela cheia.
               </p>
             </div>
             <Switch
@@ -209,9 +228,40 @@ function AdminWebinarPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3">
+          <div className="rounded-md border border-border/60 px-4 py-3">
+            <p className="text-sm font-medium text-foreground">Velocidade de reprodução</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Fixada em 1x: o menu de velocidade não fica disponível para o participante.
+            </p>
+          </div>
+        </AdminCard>
+
+        <AdminCard
+          title="Momento da oferta"
+          description="A oferta só aparece quando o tempo realmente assistido atinge este momento."
+        >
+          <TextField
+            label="Momento da oferta (HH:MM:SS)"
+            placeholder="01:04:00"
+            hint={revealHint ?? "Formato inválido. Use HH:MM:SS."}
+            value={revealInput}
+            onChange={setRevealInput}
+          />
+          {isTestReveal ? (
+            <p className="rounded-md border border-primary/40 bg-primary/10 px-4 py-3 text-xs text-foreground">
+              Atenção: este é um tempo de teste. Salvo assim, qualquer participante verá a oferta
+              logo no início da aula. Restaure o horário definitivo ao terminar os testes.
+            </p>
+          ) : null}
+        </AdminCard>
+
+        <AdminCard
+          title="Simulação"
+          description="Notificações simuladas de inscrição durante a aula."
+        >
+          <div className="flex items-start justify-between gap-4 rounded-md border border-border/60 px-4 py-3">
             <div className="pr-4">
-              <Label htmlFor="simulation">Modo de simulação</Label>
+              <Label htmlFor="simulation">Notificações simuladas</Label>
               <p className="mt-1 text-xs text-muted-foreground">
                 Quando desligado, nenhum evento simulado é exibido na aula.
               </p>
@@ -222,57 +272,47 @@ function AdminWebinarPage() {
               onCheckedChange={(checked) => setForm((f) => ({ ...f, simulationMode: checked }))}
             />
           </div>
+          <PreviewLink to="/admin/simulacao" label="GERENCIAR EVENTOS" />
+        </AdminCard>
 
-          <div className="rounded-lg border border-border/60 px-4 py-3">
-            <Label>Velocidade de reprodução</Label>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Fixada em 1x nesta versão (<code>defaultSpeed=1</code>, sem menu de velocidade).
-            </p>
+        <AdminCard
+          title="Audiência"
+          description="Camada visual de atividade. Hoje usa apenas dados simulados, independentes das notificações."
+        >
+          <div className="flex items-center justify-between gap-4 rounded-md border border-border/60 px-4 py-3">
+            <Label htmlFor="viewer-on">Exibir contador de audiência</Label>
+            <Switch
+              id="viewer-on"
+              checked={form.viewerCounterEnabled}
+              onCheckedChange={(checked) =>
+                setForm((f) => ({ ...f, viewerCounterEnabled: checked }))
+              }
+            />
           </div>
+          <div className="flex items-center justify-between gap-4 rounded-md border border-border/60 px-4 py-3">
+            <Label htmlFor="viewer-sim">Usar audiência simulada</Label>
+            <Switch
+              id="viewer-sim"
+              checked={form.viewerSimulationEnabled}
+              onCheckedChange={(checked) =>
+                setForm((f) => ({ ...f, viewerSimulationEnabled: checked }))
+              }
+            />
+          </div>
+          <TextField
+            label="Texto do contador"
+            placeholder="pessoas acompanhando"
+            value={form.viewerLabel}
+            onChange={(v) => setForm((f) => ({ ...f, viewerLabel: v }))}
+          />
 
-          <section className="space-y-4 rounded-lg border border-border/60 px-4 py-4">
-            <div>
-              <h2 className="text-overline">Atividade da transmissão</h2>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Camada visual de audiência. Hoje apenas dados simulados — independente da
-                simulação de compras.
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-foreground">Curva de audiência</p>
+            {curve.length === 0 ? (
+              <p className="rounded-md border border-dashed border-border px-4 py-3 text-xs text-muted-foreground">
+                Nenhum ponto configurado. A aula usará a curva padrão.
               </p>
-            </div>
-
-            <div className="flex items-center justify-between gap-4">
-              <Label htmlFor="viewer-on">Exibir contador de audiência</Label>
-              <Switch
-                id="viewer-on"
-                checked={form.viewerCounterEnabled}
-                onCheckedChange={(checked) =>
-                  setForm((f) => ({ ...f, viewerCounterEnabled: checked }))
-                }
-              />
-            </div>
-
-            <div className="flex items-center justify-between gap-4">
-              <Label htmlFor="viewer-sim">Usar audiência simulada</Label>
-              <Switch
-                id="viewer-sim"
-                checked={form.viewerSimulationEnabled}
-                onCheckedChange={(checked) =>
-                  setForm((f) => ({ ...f, viewerSimulationEnabled: checked }))
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="viewer-label">Texto do contador</Label>
-              <Input
-                id="viewer-label"
-                value={form.viewerLabel}
-                onChange={(e) => setForm((f) => ({ ...f, viewerLabel: e.target.value }))}
-                placeholder="pessoas acompanhando"
-              />
-            </div>
-
-            <div className="space-y-3">
-              <Label>Curva de audiência</Label>
+            ) : (
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[320px] text-sm">
                   <thead>
@@ -289,6 +329,7 @@ function AdminWebinarPage() {
                         <td className="py-1.5">
                           <Input
                             className="h-8 w-24"
+                            aria-label={`Pessoas em ${secondsToHms(point.time)}`}
                             value={String(point.viewers)}
                             inputMode="numeric"
                             onChange={(e) => {
@@ -310,73 +351,96 @@ function AdminWebinarPage() {
                           />
                         </td>
                         <td className="py-1.5 text-right">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() =>
+                          <ConfirmDelete
+                            title="Excluir ponto da curva?"
+                            description={`O ponto de ${secondsToHms(point.time)} será removido.`}
+                            onConfirm={() =>
                               setCurve((points) => points.filter((p) => p.time !== point.time))
                             }
-                          >
-                            Excluir
-                          </Button>
+                          />
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+            )}
 
-              <div className="flex flex-wrap items-end gap-2">
-                <div className="space-y-1">
-                  <Label htmlFor="point-time" className="text-xs">
-                    Horário
-                  </Label>
-                  <Input
-                    id="point-time"
-                    className="h-9 w-32"
-                    value={pointTime}
-                    onChange={(e) => setPointTime(e.target.value)}
-                    placeholder="00:05:00"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="point-viewers" className="text-xs">
-                    Pessoas
-                  </Label>
-                  <Input
-                    id="point-viewers"
-                    className="h-9 w-28"
-                    value={pointViewers}
-                    inputMode="numeric"
-                    onChange={(e) => setPointViewers(e.target.value)}
-                  />
-                </div>
-                <Button type="button" variant="secondary" onClick={addPoint}>
-                  + ADICIONAR PONTO
-                </Button>
+            <div className="flex flex-wrap items-end gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="point-time">Horário</Label>
+                <Input
+                  id="point-time"
+                  className="h-9 w-32"
+                  value={pointTime}
+                  onChange={(e) => setPointTime(e.target.value)}
+                  placeholder="00:10:00"
+                />
               </div>
-              {curveError ? <p className="text-sm text-destructive">{curveError}</p> : null}
+              <div className="space-y-1">
+                <Label htmlFor="point-viewers">Pessoas</Label>
+                <Input
+                  id="point-viewers"
+                  className="h-9 w-28"
+                  value={pointViewers}
+                  inputMode="numeric"
+                  onChange={(e) => setPointViewers(e.target.value)}
+                />
+              </div>
+              <Button type="button" variant="quiet" size="sm" onClick={addPoint}>
+                <Plus className="size-4" /> ADICIONAR PONTO
+              </Button>
             </div>
-          </section>
+            {curveError ? <p className="text-xs text-destructive">{curveError}</p> : null}
+          </div>
+        </AdminCard>
 
-          {feedback ? (
-            <p
-              className={
-                feedback.type === "ok"
-                  ? "text-sm text-primary"
-                  : "text-sm text-destructive"
-              }
+        <AdminCard
+          title="Ferramentas de teste"
+          description="Atalhos para conferir a aula antes de divulgar. Qualquer valor aqui só passa a valer depois de salvar — e afeta também o público."
+        >
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="quiet"
+              size="sm"
+              onClick={() => {
+                setRevealInput("00:00:15");
+                setForm((f) => ({
+                  ...f,
+                  simulationMode: true,
+                  viewerCounterEnabled: true,
+                  viewerSimulationEnabled: true,
+                }));
+                setFeedback({
+                  type: "error",
+                  message:
+                    "Configuração de teste preenchida no formulário. Ela só vale para o público depois que você salvar.",
+                });
+              }}
             >
-              {feedback.message}
-            </p>
-          ) : null}
+              PREENCHER CONFIGURAÇÃO DE TESTE
+            </Button>
+            <Button
+              type="button"
+              variant="quiet"
+              size="sm"
+              onClick={() => {
+                setRevealInput(secondsToHms(webinarDefaults.offerRevealSeconds));
+                setFeedback({
+                  type: "ok",
+                  message: "Momento da oferta restaurado para 01:04:00. Salve para aplicar.",
+                });
+              }}
+            >
+              RESTAURAR MOMENTO PADRÃO (01:04:00)
+            </Button>
+            <PreviewLink to="/admin/preview" label="PRÉ-VISUALIZAR OFERTA" />
+          </div>
+        </AdminCard>
 
-          <Button type="submit" disabled={save.isPending}>
-            {save.isPending ? "Salvando…" : "SALVAR ALTERAÇÕES"}
-          </Button>
-        </form>
-      )}
+        <SaveBar pending={save.isPending} feedback={feedback} />
+      </form>
     </AdminShell>
   );
 }
