@@ -23,6 +23,17 @@ export type WebinarSettings = {
   disableForward: boolean;
   /** Velocidade padrão do player (`config.playback_speed`). Nesta versão sempre 1. */
   playbackSpeed: number;
+  /** Exibe a camada de atividade/audiência (`config.viewer_counter_enabled`). */
+  viewerCounterEnabled: boolean;
+  /**
+   * Usa audiência SIMULADA a partir da curva (`config.viewer_simulation_enabled`).
+   * Independente de `simulation_mode` (notificações de compra).
+   */
+  viewerSimulationEnabled: boolean;
+  /** Texto ao lado do número (`config.viewer_label`). */
+  viewerLabel: string;
+  /** Curva de audiência simulada (`config.viewer_curve`). */
+  viewerCurve: ViewerCheckpoint[];
 };
 
 export const webinarDefaults: WebinarSettings = {
