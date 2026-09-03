@@ -1,16 +1,22 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { CalendarDays, Clock, Eye, Minus } from "lucide-react";
 
 import { Container, GoldRule, Section } from "@/components/ds/container";
 import { IrisGlow, IrisMark } from "@/components/ds/iris";
-import { Badge } from "@/components/ui/badge";
+import { Reveal } from "@/components/ds/reveal";
+import { LeadForm } from "@/components/capture/lead-form";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useCaptureContent } from "@/lib/capture-content";
 
-const title = "OLHE DIFERENTE — Aula com o Professor Marcos Dias";
+const title = "OLHE DIFERENTE — Aula gratuita de Iridologia com o Prof. Marcos Dias";
 const description =
-  "Página de captação da aula OLHE DIFERENTE, do Professor Marcos Dias. Estrutura inicial do sistema.";
+  "Aula online e gratuita sobre Iridologia: aprenda a desenvolver um olhar clínico integrativo com o Professor Marcos Dias, com quase 30 anos de ensino e prática.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,67 +25,411 @@ export const Route = createFileRoute("/")({
       { name: "description", content: description },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: CapturePage,
 });
 
-function CapturePage() {
+function scrollToForm() {
+  const target =
+    document.getElementById("inscricao-final") ?? document.getElementById("inscricao");
+  target?.scrollIntoView({ behavior: "smooth", block: "center" });
+  target?.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+}
+
+function Headline({ text, highlight }: { text: string; highlight?: string }) {
+  if (!highlight || !text.includes(highlight)) {
+    return <h1 className="text-display text-foreground">{text}</h1>;
+  }
+  const [before, after] = text.split(highlight);
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <h1 className="text-display text-foreground">
+      {before}
+      <em className="not-italic font-display italic text-primary">{highlight}</em>
+      {after}
+    </h1>
+  );
+}
+
+function DateStamp({ date, time }: { date: string; time?: string }) {
+  return (
+    <div className="inline-flex flex-wrap items-center gap-x-5 gap-y-2 rounded-sm border border-primary/30 bg-card/50 px-5 py-3 backdrop-blur">
+      <span className="inline-flex items-center gap-2 text-sm tracking-[0.14em] text-foreground">
+        <CalendarDays className="size-4 text-primary" />
+        {date}
+      </span>
+      {time ? (
+        <span className="inline-flex items-center gap-2 text-sm tracking-[0.14em] text-muted-foreground">
+          <Clock className="size-4 text-primary" />
+          {time}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
+  if (src) {
+    return (
+      <figure className="relative w-full max-w-lg overflow-hidden rounded-full ring-1 ring-primary/25 shadow-[var(--shadow-elevated)]">
+        <img src={src} alt={alt} loading="lazy" className="aspect-square w-full object-cover" />
+      </figure>
+    );
+  }
+  return (
+    <div className="relative flex items-center justify-center">
+      <IrisMark size={380} className="max-w-full animate-[spin_120s_linear_infinite] motion-reduce:animate-none" />
+      <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_45%,var(--background)_92%)]" />
+    </div>
+  );
+}
+
+function CapturePage() {
+  const { block, field } = useCaptureContent();
+
+  const hero = block("hero");
+  const form = block("form");
+  const dateLabel = field("hero", "date_label", "[DATA DA AULA]");
+  const timeLabel = field("hero", "time_label", "[HORÁRIO]");
+  const microcopy = form.body ?? "";
+
+  return (
+    <main className="relative min-h-screen overflow-x-hidden">
       <IrisGlow />
 
+      {/* Cabeçalho: apenas a marca. Nenhum acesso administrativo é exposto ao visitante. */}
       <Container width="wide" className="relative flex items-center justify-between py-6">
         <span className="font-display text-sm uppercase tracking-[0.3em] text-primary">
-          Olhe Diferente
+          {field("hero", "brand", "OLHE DIFERENTE.")}
         </span>
-        <Link to="/admin" className="text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-primary">
-          Admin
-        </Link>
+        <span className="hidden text-xs uppercase tracking-[0.24em] text-muted-foreground sm:inline">
+          Professor Marcos Dias
+        </span>
       </Container>
 
-      <Section className="relative">
+      {/* HERO */}
+      <Section id="inscricao" className="relative pt-6">
         <Container width="wide">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <Badge variant="gold">Aula online</Badge>
-              <h1 className="text-display mt-6 text-foreground">Olhe Diferente</h1>
-              <p className="text-lede mt-5 max-w-xl">
-                Fundação da página de captação. O conteúdo definitivo será gerenciado pelo painel
-                administrativo.
-              </p>
-              <GoldRule className="my-8 max-w-md" />
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+            <Reveal>
+              <p className="text-overline">{hero.subtitle}</p>
+              <div className="mt-5">
+                <Headline
+                  text={hero.title ?? ""}
+                  highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
+                />
+              </div>
+              <p className="text-lede mt-6 max-w-xl">{hero.body}</p>
 
-              <Card className="max-w-md border-border/70 bg-card/70 backdrop-blur">
-                <CardContent className="space-y-4 p-6">
-                  <p className="text-overline">Inscrição</p>
-                  <div className="space-y-2">
-                    <Label htmlFor="lead-name">Nome</Label>
-                    <Input id="lead-name" name="name" placeholder="Seu nome" disabled />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lead-email">E-mail</Label>
-                    <Input id="lead-email" name="email" type="email" placeholder="seu@email.com" disabled />
-                  </div>
-                  <Button variant="gold" size="lg" className="w-full" disabled>
-                    Formulário será ativado na próxima etapa
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+              <div className="mt-8">
+                <DateStamp date={dateLabel} time={timeLabel} />
+              </div>
 
-            <div className="flex justify-center lg:justify-end">
-              <IrisMark size={320} className="max-w-full" />
-            </div>
+              <GoldRule className="my-9 max-w-md" />
+
+              <div className="max-w-md rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
+                <h2 className="text-heading text-foreground">{form.title}</h2>
+                <div className="mt-5">
+                  <LeadForm
+                    idPrefix="hero"
+                    source="capture_hero"
+                    ctaLabel={form.subtitle ?? "QUERO MINHA VAGA GRATUITA"}
+                    microcopy={microcopy}
+                  />
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={120} className="flex justify-center lg:justify-end">
+              <IrisVisual
+                src={hero.media_url}
+                alt="Macrofotografia de uma íris humana em detalhe"
+              />
+            </Reveal>
           </div>
         </Container>
       </Section>
 
-      <Container width="wide" className="border-t border-border/60 py-8">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Professor Marcos Dias
-        </p>
-      </Container>
+      {/* A GRANDE PERGUNTA */}
+      <Section className="relative border-t border-border/50">
+        <Container width="default">
+          <Reveal>
+            <h2 className="text-title max-w-3xl text-foreground">{block("question").title}</h2>
+            <GoldRule className="my-10 max-w-xs" />
+            <div className="max-w-2xl space-y-6">
+              {field<string[]>("question", "paragraphs", []).map((paragraph, index) => (
+                <p
+                  key={paragraph}
+                  className={
+                    index >= 4
+                      ? "font-display text-xl leading-relaxed text-foreground sm:text-2xl"
+                      : "text-lede"
+                  }
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* O QUE VOCÊ VAI DESCOBRIR */}
+      <Section className="relative border-t border-border/50">
+        <Container width="default">
+          <Reveal>
+            <p className="text-overline">O que você vai descobrir</p>
+            <h2 className="text-title mt-3 text-foreground">{block("discover").title}</h2>
+          </Reveal>
+
+          <ol className="mt-14 space-y-14">
+            {field<
+              Array<{ number: string; title: string; body: string; steps?: string[] }>
+            >("discover", "items", []).map((item, index) => (
+              <Reveal as="li" key={item.number} delay={index * 60}>
+                <div className="grid gap-4 border-t border-border/50 pt-8 sm:grid-cols-[6rem_1fr] sm:gap-8">
+                  <span className="font-display text-4xl leading-none text-primary/70 sm:text-5xl">
+                    {item.number}
+                  </span>
+                  <div>
+                    <h3 className="text-heading text-foreground">{item.title}</h3>
+                    <p className="text-lede mt-3 max-w-2xl">{item.body}</p>
+
+                    {item.steps ? (
+                      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+                        {item.steps.map((step, stepIndex) => (
+                          <div key={step} className="flex items-center gap-3">
+                            <span className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/5 px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground">
+                              <span className="text-primary">{stepIndex + 1}</span>
+                              {step}
+                            </span>
+                            {stepIndex < item.steps!.length - 1 ? (
+                              <Minus className="hidden size-4 shrink-0 text-primary/40 sm:block" />
+                            ) : null}
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+        </Container>
+      </Section>
+
+      {/* PARA QUEM É */}
+      <Section className="relative border-t border-border/50">
+        <Container width="default">
+          <Reveal>
+            <h2 className="text-title max-w-2xl text-foreground">{block("audience").title}</h2>
+          </Reveal>
+          <ul className="mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            {field<string[]>("audience", "items", []).map((item, index) => (
+              <Reveal as="li" key={item} delay={index * 40} className="flex gap-4">
+                <Eye className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
+                <span className="text-base leading-relaxed text-foreground/90">{item}</span>
+              </Reveal>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* PARA QUEM NÃO É */}
+      <Section className="relative">
+        <Container width="default">
+          <Reveal className="rounded-sm border border-border/60 bg-[color-mix(in_oklab,var(--forest-deep)_78%,black)] px-6 py-12 sm:px-12">
+            <h2 className="text-heading text-muted-foreground">{block("not_audience").title}</h2>
+            <ul className="mt-6 space-y-3">
+              {field<string[]>("not_audience", "items", []).map((item) => (
+                <li key={item} className="flex gap-4 text-base text-muted-foreground">
+                  <Minus className="mt-2 size-3 shrink-0 text-muted-foreground/60" aria-hidden />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <GoldRule className="my-9 max-w-xs" />
+            <p className="font-display text-2xl leading-snug text-foreground sm:text-3xl">
+              {(block("not_audience").body ?? "").split("\n").map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* PROFESSOR */}
+      <Section className="relative border-t border-border/50">
+        <Container width="default">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+            <Reveal>
+              <p className="text-overline">{block("teacher").title}</p>
+              <h2 className="text-title mt-3 text-foreground">{block("teacher").subtitle}</h2>
+
+              <div className="mt-8 overflow-hidden rounded-sm border border-border/60 bg-card/40">
+                {block("teacher").media_url ? (
+                  <img
+                    src={block("teacher").media_url}
+                    alt="Professor Marcos Dias"
+                    loading="lazy"
+                    className="aspect-[4/5] w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex aspect-[4/5] items-center justify-center px-6 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                      Espaço reservado para a fotografia do professor
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 border-l-2 border-primary/50 pl-5">
+                <p className="font-display text-3xl text-primary">
+                  {field("teacher", "badge_title", "")}
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                  {field("teacher", "badge_subtitle", "")}
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={100} className="space-y-6">
+              {field<string[]>("teacher", "paragraphs", []).map((paragraph) => (
+                <p key={paragraph} className="text-lede">
+                  {paragraph}
+                </p>
+              ))}
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {field<string[]>("teacher", "pillars", []).map((pillar) => (
+                  <li
+                    key={pillar}
+                    className="border-t border-border/60 pt-3 text-sm uppercase tracking-[0.14em] text-foreground/90"
+                  >
+                    {pillar}
+                  </li>
+                ))}
+              </ul>
+              <p className="font-display text-xl leading-relaxed text-foreground sm:text-2xl">
+                {field("teacher", "closing", "")}
+              </p>
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
+
+      {/* MANIFESTO */}
+      <Section className="relative overflow-hidden bg-[color-mix(in_oklab,var(--forest-deep)_82%,black)]">
+        <div
+          aria-hidden
+          className="iris-field pointer-events-none absolute -right-40 top-1/2 size-[40rem] -translate-y-1/2 opacity-[0.12] blur-2xl"
+        />
+        <Container width="default" className="relative">
+          <Reveal>
+            <h2 className="text-display text-primary">{block("manifesto").title}</h2>
+            <GoldRule className="my-10 max-w-sm" />
+            <div className="max-w-2xl space-y-6">
+              {field<string[]>("manifesto", "paragraphs", []).map((paragraph) => (
+                <p key={paragraph} className="text-lede">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <p className="mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
+              {block("manifesto").body}
+            </p>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* SEGUNDA CAPTURA */}
+      <Section id="inscricao-final" className="relative border-t border-border/50">
+        <Container width="default">
+          <div className="grid items-start gap-12 lg:grid-cols-2">
+            <Reveal>
+              <h2 className="text-title text-foreground">{block("second_capture").title}</h2>
+              <p className="text-lede mt-5 max-w-lg">{block("second_capture").body}</p>
+              <div className="mt-8">
+                <DateStamp date={dateLabel} time={timeLabel} />
+              </div>
+            </Reveal>
+
+            <Reveal delay={100} className="rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
+              <h3 className="text-heading text-foreground">{form.title}</h3>
+              <div className="mt-5">
+                <LeadForm
+                  idPrefix="final"
+                  source="capture_secondary"
+                  ctaLabel={field("second_capture", "cta", "QUERO PARTICIPAR DA AULA GRATUITA")}
+                  microcopy={microcopy}
+                />
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </Section>
+
+      {/* FAQ */}
+      <Section className="relative border-t border-border/50">
+        <Container width="narrow">
+          <Reveal>
+            <h2 className="text-title text-foreground">{block("faq").title}</h2>
+            <Accordion type="single" collapsible className="mt-8">
+              {field<Array<{ q: string; a: string }>>("faq", "items", []).map((item) => (
+                <AccordionItem key={item.q} value={item.q} className="border-border/60">
+                  <AccordionTrigger className="font-display text-base text-foreground hover:no-underline sm:text-lg">
+                    {item.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                    {item.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* CTA FINAL */}
+      <Section className="relative border-t border-border/50">
+        <Container width="default">
+          <Reveal className="text-center">
+            <h2 className="text-title mx-auto max-w-3xl text-foreground">
+              {block("final_cta").title}
+            </h2>
+            <p className="text-lede mx-auto mt-4 max-w-2xl">{block("final_cta").subtitle}</p>
+            <GoldRule className="mx-auto my-10 max-w-xs" />
+            <p className="mx-auto max-w-xl text-base text-foreground/90">
+              {block("final_cta").body}
+            </p>
+            <p className="mx-auto mt-8 max-w-2xl font-display text-2xl leading-snug text-primary sm:text-3xl">
+              {field("final_cta", "quote", "")}
+            </p>
+            <Button
+              variant="gold"
+              size="xl"
+              onClick={scrollToForm}
+              className="mt-10 transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              {field("final_cta", "cta", "QUERO MINHA VAGA")}
+            </Button>
+          </Reveal>
+        </Container>
+      </Section>
+
+      <footer className="border-t border-border/60 py-10">
+        <Container width="wide" className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-display text-sm uppercase tracking-[0.3em] text-primary">
+            Olhe Diferente
+          </span>
+          <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Professor Marcos Dias
+          </span>
+        </Container>
+      </footer>
     </main>
   );
 }
