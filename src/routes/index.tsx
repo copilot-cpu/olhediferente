@@ -85,7 +85,7 @@ function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
         <div className="relative flex items-center justify-center">
           <IrisMark
             size={560}
-            className="w-full max-w-[30rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none lg:max-w-[36rem]"
+            className="mx-auto w-full max-w-[19rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none sm:max-w-[24rem] lg:max-w-[30rem]"
           />
           <div
             aria-hidden
@@ -141,7 +141,7 @@ function CapturePage() {
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-8 max-w-md" />
+              <GoldRule className="my-7 max-w-md" />
 
               <div className="max-w-md rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
