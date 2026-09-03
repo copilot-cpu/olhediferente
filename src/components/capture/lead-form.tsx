@@ -195,7 +195,7 @@ export function LeadForm({
           </>
         ) : (
           ctaLabel
-        )
+        )}
       </Button>
 
       {microcopy ? (
