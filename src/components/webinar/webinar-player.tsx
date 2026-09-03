@@ -27,7 +27,6 @@ export function WebinarPlayer({
 
   useEffect(() => {
     if (!url) return;
-    setStatus("loading");
     const adapter = new PandaPlayerAdapter(iframeId);
     adapterRef.current = adapter;
     const unsubscribe = adapter.subscribe((_state, event) => {
