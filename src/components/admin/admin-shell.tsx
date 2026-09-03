@@ -20,12 +20,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/captacao", label: "Captação", icon: Sprout },
-  { to: "/admin/webinar", label: "Webinar", icon: PlayCircle },
-  { to: "/admin/oferta", label: "Oferta", icon: Gift },
-  { to: "/admin/simulacao", label: "Simulação", icon: FlaskConical },
-  { to: "/admin/leads", label: "Leads", icon: Users },
-  { to: "/admin/configuracoes", label: "Configurações", icon: Settings },
+  { to: "/admin/captacao", label: "Captação", icon: Sprout, exact: false },
+  { to: "/admin/webinar", label: "Webinar", icon: PlayCircle, exact: false },
+  { to: "/admin/oferta", label: "Oferta", icon: Gift, exact: false },
+  { to: "/admin/simulacao", label: "Simulação", icon: FlaskConical, exact: false },
+  { to: "/admin/leads", label: "Leads", icon: Users, exact: false },
+  { to: "/admin/configuracoes", label: "Configurações", icon: Settings, exact: false },
 ] as const;
 
 export function AdminShell({
@@ -51,7 +51,7 @@ export function AdminShell({
         <Link
           key={item.to}
           to={item.to}
-          activeOptions={{ exact: "exact" in item ? item.exact : false }}
+          activeOptions={{ exact: item.exact }}
           onClick={() => setOpen(false)}
           className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground data-[status=active]:bg-sidebar-accent data-[status=active]:text-sidebar-primary"
         >
