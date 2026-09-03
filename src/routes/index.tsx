@@ -145,7 +145,7 @@ function CapturePage() {
 
               <GoldRule className="my-7 max-w-md" />
 
-              <div className="min-w-0 max-w-lg rounded-sm border border-gold/25 bg-surface-raised/80 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
+              <div className="min-w-0 max-w-lg rounded-sm border border-gold/25 bg-surface-raised/80 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7 lg:max-w-none">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
                 <div className="mt-5">
                   <LeadForm
