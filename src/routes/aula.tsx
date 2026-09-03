@@ -5,6 +5,7 @@ import { Container } from "@/components/ds/container";
 import { IrisGlow } from "@/components/ds/iris";
 import { BroadcastActivity } from "@/components/webinar/broadcast-activity";
 import { BroadcastStatus } from "@/components/webinar/broadcast-status";
+import { OfferSection } from "@/components/offer/offer-section";
 import { OfferRevealRegion } from "@/components/webinar/offer-reveal-region";
 import { PurchaseToast } from "@/components/webinar/purchase-toast";
 import { WebinarPlayer } from "@/components/webinar/webinar-player";
@@ -121,6 +122,11 @@ function WebinarPage() {
           <OfferRevealRegion offerUnlocked={offerUnlocked} />
         </div>
       </Container>
+
+      {/* Continuação natural da aula: oferta completa, revelada pela mesma engine. */}
+      <OfferRevealRegion offerUnlocked={offerUnlocked} className="relative">
+        <OfferSection />
+      </OfferRevealRegion>
 
       <PurchaseToast toast={visibleToast} />
     </main>
