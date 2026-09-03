@@ -150,7 +150,7 @@
   font-size: clamp(2.55rem, 11vw, 4rem);
   line-height: 0.99;
   letter-spacing: -0.025em;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 @media (min-width: 641px) {
