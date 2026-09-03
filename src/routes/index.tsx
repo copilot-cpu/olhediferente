@@ -70,7 +70,7 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
   );
 }
 
-function IrisVisual({ src, alt }: { src?: string; alt: string }) {
+function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
   if (src) {
     return (
       <figure className="relative w-full max-w-lg overflow-hidden rounded-full ring-1 ring-primary/25 shadow-[var(--shadow-elevated)]">
