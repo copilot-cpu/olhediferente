@@ -14,16 +14,271 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      capture_page_content: {
+        Row: {
+          block_key: string
+          body: string | null
+          created_at: string
+          data: Json
+          id: string
+          is_active: boolean
+          media_url: string | null
+          sort_order: number
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          block_key: string
+          body?: string | null
+          created_at?: string
+          data?: Json
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          sort_order?: number
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          block_key?: string
+          body?: string | null
+          created_at?: string
+          data?: Json
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          sort_order?: number
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          metadata: Json
+          name: string
+          phone: string | null
+          source: string | null
+          updated_at: string
+          webinar_slot: string | null
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          metadata?: Json
+          name: string
+          phone?: string | null
+          source?: string | null
+          updated_at?: string
+          webinar_slot?: string | null
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          phone?: string | null
+          source?: string | null
+          updated_at?: string
+          webinar_slot?: string | null
+        }
+        Relationships: []
+      }
+      offer_content: {
+        Row: {
+          block_key: string
+          body: string | null
+          bonuses: Json
+          checkout_url: string | null
+          created_at: string
+          guarantee: string | null
+          id: string
+          is_active: boolean
+          price_label: string | null
+          sort_order: number
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          block_key: string
+          body?: string | null
+          bonuses?: Json
+          checkout_url?: string | null
+          created_at?: string
+          guarantee?: string | null
+          id?: string
+          is_active?: boolean
+          price_label?: string | null
+          sort_order?: number
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          block_key?: string
+          body?: string | null
+          bonuses?: Json
+          checkout_url?: string | null
+          created_at?: string
+          guarantee?: string | null
+          id?: string
+          is_active?: boolean
+          price_label?: string | null
+          sort_order?: number
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          is_public: boolean
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      webinar_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          is_active: boolean
+          payload: Json
+          title: string | null
+          trigger_at_seconds: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          is_active?: boolean
+          payload?: Json
+          title?: string | null
+          trigger_at_seconds?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          is_active?: boolean
+          payload?: Json
+          title?: string | null
+          trigger_at_seconds?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      webinar_settings: {
+        Row: {
+          config: Json
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          is_active: boolean
+          key: string
+          schedule_mode: string
+          title: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          is_active?: boolean
+          key: string
+          schedule_mode?: string
+          title?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          is_active?: boolean
+          key?: string
+          schedule_mode?: string
+          title?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +405,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
