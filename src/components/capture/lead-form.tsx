@@ -9,6 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
+const FIELD_CLASS =
+  "h-11 rounded-sm border-transparent bg-cream text-base text-[var(--forest-deep)] shadow-none placeholder:text-[var(--forest-deep)]/45 focus-visible:ring-2 focus-visible:ring-ring aria-invalid:border-destructive";
+
 const leadSchema = z.object({
   name: z
     .string()
@@ -121,7 +124,7 @@ export function LeadForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={cn("space-y-4", className)}>
+    <form onSubmit={handleSubmit} noValidate className={cn("min-w-0 space-y-4", className)}>
       <div className="space-y-2">
         <Label htmlFor={`${idPrefix}-name`}>Nome</Label>
         <Input
@@ -132,6 +135,7 @@ export function LeadForm({
           onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
           aria-invalid={!!errors.name}
           disabled={submitting}
+          className={FIELD_CLASS}
         />
         {errors.name ? <p className="text-xs text-destructive">{errors.name}</p> : null}
       </div>
@@ -148,6 +152,7 @@ export function LeadForm({
           onChange={(e) => setValues((v) => ({ ...v, email: e.target.value }))}
           aria-invalid={!!errors.email}
           disabled={submitting}
+          className={FIELD_CLASS}
         />
         {errors.email ? <p className="text-xs text-destructive">{errors.email}</p> : null}
       </div>
@@ -165,6 +170,7 @@ export function LeadForm({
           onChange={(e) => setValues((v) => ({ ...v, whatsapp: maskPhone(e.target.value) }))}
           aria-invalid={!!errors.whatsapp}
           disabled={submitting}
+          className={FIELD_CLASS}
         />
         {errors.whatsapp ? <p className="text-xs text-destructive">{errors.whatsapp}</p> : null}
       </div>
@@ -180,7 +186,7 @@ export function LeadForm({
         variant="gold"
         size="lg"
         disabled={submitting}
-        className="w-full transition-transform duration-300 hover:-translate-y-0.5"
+        className="h-auto min-h-12 w-full whitespace-normal py-3 text-balance leading-snug transition-transform duration-300 hover:-translate-y-0.5"
       >
         {submitting ? (
           <>
