@@ -145,7 +145,7 @@ function CapturePage() {
 
               <GoldRule className="my-7 max-w-md" />
 
-              <div className="max-w-md rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
+              <div className="min-w-0 max-w-md rounded-sm border border-border/70 bg-card/70 p-5 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-6">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
                 <div className="mt-5">
                   <LeadForm
@@ -170,7 +170,7 @@ function CapturePage() {
       </Section>
 
       {/* A GRANDE PERGUNTA */}
-      <Section className="relative border-t border-border/50">
+      <Section className="relative border-t border-primary/20 bg-surface-raised">
         <Container width="default">
           <Reveal>
             <h2 className="text-title max-w-3xl text-foreground">{block("question").title}</h2>
@@ -194,7 +194,7 @@ function CapturePage() {
       </Section>
 
       {/* O QUE VOCÊ VAI DESCOBRIR */}
-      <Section className="relative border-t border-border/50">
+      <Section className="relative border-t border-border/50 bg-background">
         <Container width="default">
           <Reveal>
             <p className="text-overline">O que você vai descobrir</p>
@@ -238,7 +238,7 @@ function CapturePage() {
       </Section>
 
       {/* PARA QUEM É */}
-      <Section className="relative border-t border-border/50">
+      <Section className="relative border-t border-primary/20 bg-surface-raised">
         <Container width="default">
           <Reveal>
             <h2 className="text-title max-w-2xl text-foreground">{block("audience").title}</h2>
@@ -255,9 +255,9 @@ function CapturePage() {
       </Section>
 
       {/* PARA QUEM NÃO É */}
-      <Section className="relative">
+      <Section className="relative border-t border-border/50 bg-surface-deep">
         <Container width="default">
-          <Reveal className="rounded-sm border border-border/60 bg-[color-mix(in_oklab,var(--forest-deep)_78%,black)] px-6 py-12 sm:px-12">
+          <Reveal className="rounded-sm border border-border/60 bg-surface-deep px-6 py-12 sm:px-12">
             <h2 className="text-heading text-muted-foreground">{block("not_audience").title}</h2>
             <ul className="mt-6 space-y-3">
               {field<string[]>("not_audience", "items", []).map((item) => (
@@ -280,7 +280,7 @@ function CapturePage() {
       </Section>
 
       {/* PROFESSOR */}
-      <Section className="relative border-t border-border/50">
+      <Section className="relative border-t border-primary/20 bg-surface-raised">
         <Container width="default">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
             <Reveal>
@@ -339,7 +339,7 @@ function CapturePage() {
       </Section>
 
       {/* MANIFESTO */}
-      <Section className="relative overflow-hidden bg-[color-mix(in_oklab,var(--forest-deep)_82%,black)]">
+      <Section className="relative overflow-hidden border-t border-primary/20 bg-surface-deep">
         <div
           aria-hidden
           className="iris-field pointer-events-none absolute -right-40 top-1/2 size-[40rem] -translate-y-1/2 opacity-[0.12] blur-2xl"
@@ -363,9 +363,9 @@ function CapturePage() {
       </Section>
 
       {/* SEGUNDA CAPTURA */}
-      <Section id="inscricao-final" className="relative border-t border-border/50">
+      <Section id="inscricao-final" className="relative border-t border-border/50 bg-background">
         <Container width="default">
-          <div className="grid items-start gap-12 lg:grid-cols-2">
+          <div className="grid min-w-0 items-start gap-12 lg:grid-cols-2">
             <Reveal>
               <h2 className="text-title text-foreground">{block("second_capture").title}</h2>
               <p className="text-lede mt-5 max-w-lg">{block("second_capture").body}</p>
@@ -374,7 +374,7 @@ function CapturePage() {
               </div>
             </Reveal>
 
-            <Reveal delay={100} className="rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
+            <Reveal delay={100} className="min-w-0 rounded-sm border border-border/70 bg-card/70 p-5 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-6">
               <h3 className="text-heading text-foreground">{form.title}</h3>
               <div className="mt-5">
                 <LeadForm
@@ -390,7 +390,7 @@ function CapturePage() {
       </Section>
 
       {/* FAQ */}
-      <Section className="relative border-t border-border/50">
+      <Section className="relative border-t border-primary/20 bg-surface-raised">
         <Container width="narrow">
           <Reveal>
             <h2 className="text-title text-foreground">{block("faq").title}</h2>
@@ -411,7 +411,7 @@ function CapturePage() {
       </Section>
 
       {/* CTA FINAL */}
-      <Section className="relative border-t border-border/50">
+      <Section className="relative border-t border-border/50 bg-surface-deep">
         <Container width="default">
           <Reveal className="text-center">
             <h2 className="text-title mx-auto max-w-3xl text-foreground">
@@ -429,7 +429,7 @@ function CapturePage() {
               variant="gold"
               size="xl"
               onClick={scrollToForm}
-              className="mt-10 transition-transform duration-300 hover:-translate-y-0.5"
+              className="mt-10 h-auto min-h-14 max-w-full whitespace-normal py-3 text-balance transition-transform duration-300 hover:-translate-y-0.5"
             >
               {field("final_cta", "cta", "QUERO MINHA VAGA")}
             </Button>
