@@ -41,16 +41,12 @@ export function OfferRevealRegion({
         className,
       )}
     >
-      {(
-        <>
-          <p className="font-display text-xl text-foreground sm:text-2xl">
-            Conteúdo da formação liberado.
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Continue abaixo para conhecer os detalhes.
-          </p>
-        </>
-      )}
+      <p className="font-display text-xl text-foreground sm:text-2xl">
+        Conteúdo da formação liberado.
+      </p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Continue abaixo para conhecer os detalhes.
+      </p>
     </section>
   );
 }
