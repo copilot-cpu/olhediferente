@@ -1,12 +1,24 @@
 import { cn } from "@/lib/utils";
 
 /** Marca visual inspirada na íris humana. Puramente decorativa. */
-export function IrisMark({ className, size = 220 }: { className?: string; size?: number }) {
+export function IrisMark({
+  className,
+  size = 220,
+}: {
+  className?: string;
+  size?: number | string;
+}) {
+  const sizeStyle =
+    size === undefined || size === ""
+      ? undefined
+      : typeof size === "number"
+        ? { width: size, height: size }
+        : { width: size, height: size };
   return (
     <div
       aria-hidden
       className={cn("iris-field relative shrink-0", className)}
-      style={{ width: size, height: size }}
+      style={sizeStyle}
     >
       <div
         className="absolute inset-[14%] rounded-full border border-primary/25"

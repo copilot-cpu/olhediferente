@@ -124,7 +124,7 @@ export function LeadForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={cn("min-w-0 space-y-4", className)}>
+    <form onSubmit={handleSubmit} noValidate className={cn("min-w-0 space-y-5", className)}>
       <div className="space-y-2">
         <Label htmlFor={`${idPrefix}-name`}>Nome</Label>
         <Input
@@ -186,7 +186,7 @@ export function LeadForm({
         variant="gold"
         size="lg"
         disabled={submitting}
-        className="h-auto min-h-12 w-full whitespace-normal py-3 text-balance leading-snug transition-transform duration-300 hover:-translate-y-0.5"
+        className="h-auto min-h-14 w-full whitespace-normal px-6 py-3.5 text-balance text-base leading-snug shadow-[0_12px_28px_-14px_oklch(0.62_0.11_68/0.55)] transition-transform duration-300 hover:-translate-y-0.5"
       >
         {submitting ? (
           <>

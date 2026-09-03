@@ -73,9 +73,9 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 
 function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
   return (
-    <div className="relative isolate w-full">
+    <div className="relative isolate mx-auto w-full max-w-[18rem] sm:max-w-[22rem] lg:max-w-[24rem] xl:max-w-[26rem]">
       {src ? (
-        <figure className="relative mx-auto aspect-square w-full max-w-[34rem] overflow-hidden rounded-full ring-1 ring-primary/20 lg:max-w-none">
+        <figure className="relative mx-auto aspect-square w-full overflow-hidden rounded-full ring-1 ring-primary/20">
           <img src={src} alt={alt} className="h-full w-full object-cover" />
           <div
             aria-hidden
@@ -83,10 +83,10 @@ function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
           />
         </figure>
       ) : (
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex aspect-square w-full items-center justify-center">
           <IrisMark
-            size={560}
-            className="mx-auto w-full max-w-[19rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none sm:max-w-[24rem] lg:max-w-[30rem]"
+            size="100%"
+            className="animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none"
           />
           <div
             aria-hidden
@@ -126,16 +126,16 @@ function CapturePage() {
       {/* HERO */}
       <Section id="inscricao" className="relative pt-2 pb-12 sm:pt-4 lg:pt-6 lg:pb-20">
         <Container width="wide">
-          <div className="grid items-center gap-10 lg:grid-cols-[55fr_45fr] lg:gap-14">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4 max-w-[22rem] sm:max-w-[34rem] lg:max-w-[36rem]">
+              <div className="mt-4 max-w-[24rem] sm:max-w-[38rem] lg:max-w-none">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 max-w-[38rem] lg:text-[1.075rem] lg:leading-[1.6]">
+              <p className="text-lede mt-6 max-w-[40rem] lg:text-[1.075rem] lg:leading-[1.6]">
                 {hero.body}
               </p>
 
@@ -145,7 +145,7 @@ function CapturePage() {
 
               <GoldRule className="my-7 max-w-md" />
 
-              <div className="min-w-0 max-w-md rounded-sm border border-border/70 bg-card/70 p-5 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-6">
+              <div className="min-w-0 max-w-lg rounded-sm border border-gold/25 bg-surface-raised/80 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7 lg:max-w-none">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
                 <div className="mt-5">
                   <LeadForm
@@ -158,8 +158,7 @@ function CapturePage() {
               </div>
             </Reveal>
 
-            <Reveal delay={120} className="min-w-0 lg:pl-4">
-
+            <Reveal delay={120} className="min-w-0 lg:pl-2">
               <IrisVisual
                 src={hero.media_url}
                 alt="Macrofotografia de uma íris humana em detalhe"
