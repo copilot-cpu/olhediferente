@@ -564,7 +564,10 @@ export function OfferSection() {
             <h2 className="text-title max-w-2xl text-cream">{faq.title}</h2>
           </Reveal>
           <Accordion type="single" collapsible className="mx-auto mt-8 max-w-3xl">
-            {field<{ q: string; a: string }[]>("faq", "items", []).map((item, index) => (
+            {field<{ q: string; a: string; active?: boolean }[]>("faq", "items", [])
+              .filter((item) => item.active !== false && item.q)
+              .map((item, index) => (
+
               <AccordionItem key={item.q} value={`faq-${index}`} className="border-cream/15">
                 <AccordionTrigger className="text-left font-display text-base text-cream sm:text-lg">
                   {item.q}
@@ -574,6 +577,7 @@ export function OfferSection() {
                 </AccordionContent>
               </AccordionItem>
             ))}
+
           </Accordion>
         </Container>
       </Band>
