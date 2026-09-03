@@ -127,7 +127,7 @@ function CapturePage() {
           <div className="grid items-center gap-10 lg:grid-cols-[55fr_45fr] lg:gap-14">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4 max-w-[19ch] sm:max-w-[22ch] lg:max-w-[15ch]">
+              <div className="mt-4 max-w-[19ch] sm:max-w-[22ch] lg:max-w-[17ch]">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
@@ -156,7 +156,7 @@ function CapturePage() {
               </div>
             </Reveal>
 
-            <Reveal delay={120} className="order-first min-w-0 lg:order-none">
+            <Reveal delay={120} className="min-w-0 lg:pl-4">
 
               <IrisVisual
                 src={hero.media_url}
