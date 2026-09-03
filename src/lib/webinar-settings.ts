@@ -15,10 +15,14 @@ export type WebinarSettings = {
   teacherName: string;
   /** Linha de apoio da identificação (`config.lesson_subtitle`). */
   lessonSubtitle: string;
-  /** Segundos até liberar a oferta (`config.offer_reveal_seconds`). Ainda não utilizado. */
+  /** Segundos até liberar a oferta (`config.offer_reveal_seconds`). */
   offerRevealSeconds: number;
-  /** Modo de simulação (`config.simulation_mode`). Ainda não utilizado. */
+  /** Modo de simulação (`config.simulation_mode`). */
   simulationMode: boolean;
+  /** Bloqueia avanço manual via `disableForward` do Panda (`config.disable_forward`). */
+  disableForward: boolean;
+  /** Velocidade padrão do player (`config.playback_speed`). Nesta versão sempre 1. */
+  playbackSpeed: number;
 };
 
 export const webinarDefaults: WebinarSettings = {
@@ -28,9 +32,30 @@ export const webinarDefaults: WebinarSettings = {
   broadcastLabel: "AULA EM ANDAMENTO",
   teacherName: "Marcos Dias",
   lessonSubtitle: "Aula online gratuita",
-  offerRevealSeconds: 0,
+  offerRevealSeconds: 3840,
   simulationMode: false,
+  disableForward: true,
+  playbackSpeed: 1,
 };
+
+/** Converte "HH:MM:SS" (ou "MM:SS") em segundos. Retorna null se inválido. */
+export function hmsToSeconds(value: string): number | null {
+  const parts = String(value).trim().split(":");
+  if (parts.length < 2 || parts.length > 3) return null;
+  const nums = parts.map((p) => Number(p));
+  if (nums.some((n) => !Number.isFinite(n) || n < 0)) return null;
+  const [h, m, s] = parts.length === 3 ? nums : [0, ...nums];
+  return (h as number) * 3600 + (m as number) * 60 + (s as number);
+}
+
+/** Converte segundos em "HH:MM:SS". */
+export function secondsToHms(total: number): string {
+  const value = Math.max(0, Math.floor(Number(total) || 0));
+  const h = Math.floor(value / 3600);
+  const m = Math.floor((value % 3600) / 60);
+  const s = value % 60;
+  return [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
+}
 
 /**
  * Remove aspas, %22 e espaços acidentais que possam ter sido salvos junto da URL,
@@ -46,6 +71,34 @@ export function normalizeEmbedUrl(raw: string | null | undefined): string | null
   } catch {
     return null;
   }
+}
+
+/** Controles do player quando o avanço manual está bloqueado (sem progress/fast-forward/settings). */
+const LOCKED_CONTROLS = "play-large,play,current-time,volume,captions,pip,fullscreen,airplay";
+
+/**
+ * Monta a URL final do embed aplicando os parâmetros oficiais do Panda
+ * (https://docs.pandavideo.com/reference/query-params) sem duplicar valores já presentes.
+ */
+export function buildPlayerUrl(
+  rawUrl: string | null | undefined,
+  options: { disableForward: boolean; playbackSpeed: number },
+): string | null {
+  const base = normalizeEmbedUrl(rawUrl);
+  if (!base) return null;
+  const url = new URL(base);
+  const setIfAbsent = (key: string, value: string) => {
+    if (!url.searchParams.has(key)) url.searchParams.set(key, value);
+  };
+
+  if (options.disableForward) {
+    url.searchParams.set("disableForward", "true");
+    setIfAbsent("controls", LOCKED_CONTROLS);
+  }
+  // `defaultSpeed` é o parâmetro oficial; sem o controle `settings` o menu de
+  // velocidade não fica disponível para o usuário.
+  url.searchParams.set("defaultSpeed", String(options.playbackSpeed || 1));
+  return url.toString();
 }
 
 type Row = {
@@ -77,6 +130,11 @@ export function mapRow(row: Row | null | undefined): WebinarSettings {
         ? (config["offer_reveal_seconds"] as number)
         : webinarDefaults.offerRevealSeconds,
     simulationMode: config["simulation_mode"] === true,
+    disableForward: config["disable_forward"] === false ? false : true,
+    playbackSpeed:
+      typeof config["playback_speed"] === "number" && (config["playback_speed"] as number) > 0
+        ? (config["playback_speed"] as number)
+        : webinarDefaults.playbackSpeed,
   };
 }
 

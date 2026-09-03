@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Container } from "@/components/ds/container";
@@ -5,8 +6,12 @@ import { IrisGlow } from "@/components/ds/iris";
 import { BroadcastActivity } from "@/components/webinar/broadcast-activity";
 import { BroadcastStatus } from "@/components/webinar/broadcast-status";
 import { OfferRevealRegion } from "@/components/webinar/offer-reveal-region";
+import { PurchaseToast } from "@/components/webinar/purchase-toast";
 import { WebinarPlayer } from "@/components/webinar/webinar-player";
-import { useWebinarSettings } from "@/lib/webinar-settings";
+import { useWebinarEngine } from "@/hooks/use-webinar-engine";
+import type { PandaPlayerAdapter } from "@/lib/panda-player";
+import { useWebinarEvents } from "@/lib/webinar-events";
+import { buildPlayerUrl, useWebinarSettings } from "@/lib/webinar-settings";
 
 const title = "Transmissão — OLHE DIFERENTE";
 const description =
@@ -28,6 +33,19 @@ export const Route = createFileRoute("/aula")({
 
 function WebinarPage() {
   const { settings } = useWebinarSettings();
+  const { events } = useWebinarEvents();
+  const [adapter, setAdapter] = useState<PandaPlayerAdapter | null>(null);
+
+  const playerUrl = useMemo(
+    () =>
+      buildPlayerUrl(settings.videoEmbedUrl, {
+        disableForward: settings.disableForward,
+        playbackSpeed: settings.playbackSpeed,
+      }),
+    [settings.videoEmbedUrl, settings.disableForward, settings.playbackSpeed],
+  );
+
+  const { offerUnlocked, visibleToast } = useWebinarEngine({ adapter, settings, events });
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-background">
@@ -69,8 +87,9 @@ function WebinarPage() {
 
           <WebinarPlayer
             className="mt-6 sm:mt-8"
-            embedUrl={settings.videoEmbedUrl}
+            embedUrl={playerUrl}
             title={`${settings.lessonTitle} — aula online`}
+            onAdapterReady={setAdapter}
           />
 
           <dl className="mt-4 grid gap-3 rounded-lg border border-border/60 bg-card/40 px-5 py-4 sm:grid-cols-3">
@@ -99,9 +118,11 @@ function WebinarPage() {
             </p>
           </div>
 
-          <OfferRevealRegion offerUnlocked={false} />
+          <OfferRevealRegion offerUnlocked={offerUnlocked} />
         </div>
       </Container>
+
+      <PurchaseToast toast={visibleToast} />
     </main>
   );
 }
