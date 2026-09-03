@@ -35,7 +35,13 @@ export function WebinarPlayer({
     });
     void adapter.attach().catch(() => setStatus("error"));
     onAdapterReady?.(adapter);
+    // O evento `load` do iframe pode ocorrer antes da hidratação (SSR),
+    // então liberamos o skeleton se o iframe já estiver presente no DOM.
+    const settle = window.setTimeout(() => {
+      setStatus((s) => (s === "loading" ? "ready" : s));
+    }, 1500);
     return () => {
+      window.clearTimeout(settle);
       unsubscribe();
       adapter.destroy();
       adapterRef.current = null;
