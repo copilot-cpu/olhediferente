@@ -122,7 +122,46 @@ function AdminSimulacaoPage() {
     onSuccess: invalidate,
   });
 
+  const createSequence = useMutation({
+    mutationFn: async (value: { start: string; count: number; step: number; names: string }) => {
+      const start = hmsToSeconds(value.start);
+      if (start === null) throw new Error("Informe o horário inicial no formato HH:MM:SS.");
+      const names = value.names
+        .split("\n")
+        .map((n) => n.trim())
+        .filter(Boolean);
+      if (names.length === 0) throw new Error("Informe ao menos um nome (um por linha).");
+      const count = Math.min(Math.max(Number(value.count) || 0, 1), 50);
+      const step = Math.max(Number(value.step) || 1, 1);
+
+      const rows = Array.from({ length: count }, (_, index) => ({
+        event_type: "simulation_purchase",
+        title: names[index % names.length] as string,
+        trigger_at_seconds: start + index * step,
+        is_active: true,
+        payload: {
+          message: DEFAULT_PURCHASE_MESSAGE,
+          display_duration: DEFAULT_DISPLAY_DURATION,
+        },
+      }));
+
+      const { error } = await supabase.from("webinar_events").insert(rows);
+      if (error) throw error;
+      return rows.length;
+    },
+    onSuccess: (created) => {
+      setFeedback({ type: "ok", message: `${created} evento(s) criados.` });
+      invalidate();
+    },
+    onError: (error: unknown) =>
+      setFeedback({
+        type: "error",
+        message: error instanceof Error ? error.message : "Não foi possível criar a sequência.",
+      }),
+  });
+
   const events = eventsQuery.data ?? [];
+
 
   return (
     <AdminShell title="Simulação" description="Eventos simulados da aula">
