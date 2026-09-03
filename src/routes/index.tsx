@@ -73,9 +73,9 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 
 function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
   return (
-    <div className="relative isolate w-full">
+    <div className="relative isolate mx-auto w-full max-w-[26rem] sm:max-w-[28rem] lg:max-w-[26rem] xl:max-w-[28rem]">
       {src ? (
-        <figure className="relative mx-auto aspect-square w-full max-w-[34rem] overflow-hidden rounded-full ring-1 ring-primary/20 lg:max-w-none">
+        <figure className="relative mx-auto aspect-square w-full overflow-hidden rounded-full ring-1 ring-primary/20">
           <img src={src} alt={alt} className="h-full w-full object-cover" />
           <div
             aria-hidden
@@ -86,7 +86,7 @@ function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
         <div className="relative flex items-center justify-center">
           <IrisMark
             size={560}
-            className="mx-auto w-full max-w-[19rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none sm:max-w-[24rem] lg:max-w-[30rem]"
+            className="mx-auto w-full max-w-[18rem] animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none sm:max-w-[22rem] lg:max-w-[24rem]"
           />
           <div
             aria-hidden
