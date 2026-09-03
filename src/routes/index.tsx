@@ -127,7 +127,7 @@ function CapturePage() {
           <div className="grid items-center gap-10 lg:grid-cols-[55fr_45fr] lg:gap-14">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4 max-w-[19ch] sm:max-w-[22ch] lg:max-w-[17ch]">
+              <div className="mt-4 max-w-[22rem] sm:max-w-[34rem] lg:max-w-[36rem]">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
