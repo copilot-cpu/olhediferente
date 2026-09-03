@@ -16,6 +16,11 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminCaptacaoRouteImport } from './routes/_authenticated/admin.captacao'
+import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
+import { Route as AuthenticatedAdminLeadsRouteImport } from './routes/_authenticated/admin.leads'
+import { Route as AuthenticatedAdminOfertaRouteImport } from './routes/_authenticated/admin.oferta'
+import { Route as AuthenticatedAdminSimulacaoRouteImport } from './routes/_authenticated/admin.simulacao'
+import { Route as AuthenticatedAdminWebinarRouteImport } from './routes/_authenticated/admin.webinar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +57,35 @@ const AuthenticatedAdminCaptacaoRoute =
     path: '/captacao',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminConfiguracoesRoute =
+  AuthenticatedAdminConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminLeadsRoute = AuthenticatedAdminLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminOfertaRoute =
+  AuthenticatedAdminOfertaRouteImport.update({
+    id: '/oferta',
+    path: '/oferta',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSimulacaoRoute =
+  AuthenticatedAdminSimulacaoRouteImport.update({
+    id: '/simulacao',
+    path: '/simulacao',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminWebinarRoute =
+  AuthenticatedAdminWebinarRouteImport.update({
+    id: '/webinar',
+    path: '/webinar',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +93,11 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
+  '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
+  '/admin/leads': typeof AuthenticatedAdminLeadsRoute
+  '/admin/oferta': typeof AuthenticatedAdminOfertaRoute
+  '/admin/simulacao': typeof AuthenticatedAdminSimulacaoRoute
+  '/admin/webinar': typeof AuthenticatedAdminWebinarRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +105,11 @@ export interface FileRoutesByTo {
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
   '/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
+  '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
+  '/admin/leads': typeof AuthenticatedAdminLeadsRoute
+  '/admin/oferta': typeof AuthenticatedAdminOfertaRoute
+  '/admin/simulacao': typeof AuthenticatedAdminSimulacaoRoute
+  '/admin/webinar': typeof AuthenticatedAdminWebinarRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -76,13 +120,39 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
+  '/_authenticated/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
+  '/_authenticated/admin/leads': typeof AuthenticatedAdminLeadsRoute
+  '/_authenticated/admin/oferta': typeof AuthenticatedAdminOfertaRoute
+  '/_authenticated/admin/simulacao': typeof AuthenticatedAdminSimulacaoRoute
+  '/_authenticated/admin/webinar': typeof AuthenticatedAdminWebinarRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/aula' | '/auth' | '/admin' | '/admin/captacao' | '/admin/'
+  fullPaths:
+    | '/'
+    | '/aula'
+    | '/auth'
+    | '/admin'
+    | '/admin/captacao'
+    | '/admin/configuracoes'
+    | '/admin/leads'
+    | '/admin/oferta'
+    | '/admin/simulacao'
+    | '/admin/webinar'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aula' | '/auth' | '/admin/captacao' | '/admin'
+  to:
+    | '/'
+    | '/aula'
+    | '/auth'
+    | '/admin/captacao'
+    | '/admin/configuracoes'
+    | '/admin/leads'
+    | '/admin/oferta'
+    | '/admin/simulacao'
+    | '/admin/webinar'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -91,6 +161,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/admin'
     | '/_authenticated/admin/captacao'
+    | '/_authenticated/admin/configuracoes'
+    | '/_authenticated/admin/leads'
+    | '/_authenticated/admin/oferta'
+    | '/_authenticated/admin/simulacao'
+    | '/_authenticated/admin/webinar'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -152,16 +227,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCaptacaoRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/configuracoes': {
+      id: '/_authenticated/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/leads': {
+      id: '/_authenticated/admin/leads'
+      path: '/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AuthenticatedAdminLeadsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/oferta': {
+      id: '/_authenticated/admin/oferta'
+      path: '/oferta'
+      fullPath: '/admin/oferta'
+      preLoaderRoute: typeof AuthenticatedAdminOfertaRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/simulacao': {
+      id: '/_authenticated/admin/simulacao'
+      path: '/simulacao'
+      fullPath: '/admin/simulacao'
+      preLoaderRoute: typeof AuthenticatedAdminSimulacaoRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/webinar': {
+      id: '/_authenticated/admin/webinar'
+      path: '/webinar'
+      fullPath: '/admin/webinar'
+      preLoaderRoute: typeof AuthenticatedAdminWebinarRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCaptacaoRoute: typeof AuthenticatedAdminCaptacaoRoute
+  AuthenticatedAdminConfiguracoesRoute: typeof AuthenticatedAdminConfiguracoesRoute
+  AuthenticatedAdminLeadsRoute: typeof AuthenticatedAdminLeadsRoute
+  AuthenticatedAdminOfertaRoute: typeof AuthenticatedAdminOfertaRoute
+  AuthenticatedAdminSimulacaoRoute: typeof AuthenticatedAdminSimulacaoRoute
+  AuthenticatedAdminWebinarRoute: typeof AuthenticatedAdminWebinarRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCaptacaoRoute: AuthenticatedAdminCaptacaoRoute,
+  AuthenticatedAdminConfiguracoesRoute: AuthenticatedAdminConfiguracoesRoute,
+  AuthenticatedAdminLeadsRoute: AuthenticatedAdminLeadsRoute,
+  AuthenticatedAdminOfertaRoute: AuthenticatedAdminOfertaRoute,
+  AuthenticatedAdminSimulacaoRoute: AuthenticatedAdminSimulacaoRoute,
+  AuthenticatedAdminWebinarRoute: AuthenticatedAdminWebinarRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
