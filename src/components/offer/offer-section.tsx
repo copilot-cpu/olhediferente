@@ -577,6 +577,7 @@ export function OfferSection() {
                 </AccordionContent>
               </AccordionItem>
             ))}
+
           </Accordion>
         </Container>
       </Band>
