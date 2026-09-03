@@ -122,24 +122,26 @@ function CapturePage() {
       </Container>
 
       {/* HERO */}
-      <Section id="inscricao" className="relative pt-6">
+      <Section id="inscricao" className="relative pt-2 pb-12 sm:pt-4 lg:pt-6 lg:pb-20">
         <Container width="wide">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <Reveal>
+          <div className="grid items-center gap-10 lg:grid-cols-[55fr_45fr] lg:gap-14">
+            <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-5">
+              <div className="mt-4 max-w-[19ch] sm:max-w-[22ch] lg:max-w-[15ch]">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 max-w-xl">{hero.body}</p>
+              <p className="text-lede mt-6 max-w-[38rem] lg:text-[1.075rem] lg:leading-[1.6]">
+                {hero.body}
+              </p>
 
-              <div className="mt-8">
+              <div className="mt-7">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-9 max-w-md" />
+              <GoldRule className="my-8 max-w-md" />
 
               <div className="max-w-md rounded-sm border border-border/70 bg-card/70 p-6 backdrop-blur shadow-[var(--shadow-elevated)]">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
@@ -154,7 +156,8 @@ function CapturePage() {
               </div>
             </Reveal>
 
-            <Reveal delay={120} className="flex justify-center lg:justify-end">
+            <Reveal delay={120} className="order-first min-w-0 lg:order-none">
+
               <IrisVisual
                 src={hero.media_url}
                 alt="Macrofotografia de uma íris humana em detalhe"
