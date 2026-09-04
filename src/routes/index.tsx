@@ -71,32 +71,32 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
   );
 }
 
-function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
+function HeroBackdrop() {
   return (
-    <div className="relative isolate mx-auto w-full max-w-[18rem] sm:max-w-[22rem] lg:max-w-[24rem] xl:max-w-[26rem]">
-      {src ? (
-        <figure className="relative mx-auto aspect-square w-full overflow-hidden rounded-full ring-1 ring-primary/20">
-          <img src={src} alt={alt} className="h-full w-full object-cover" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_38%,color-mix(in_oklab,var(--background)_88%,transparent)_100%)]"
-          />
-        </figure>
-      ) : (
-        <div className="relative flex aspect-square w-full items-center justify-center">
-          <IrisMark
-            size="100%"
-            className="animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_40%,var(--background)_88%)]"
-          />
-        </div>
-      )}
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <video
+        className="h-full w-full object-cover opacity-70 motion-reduce:hidden"
+        src={heroVideo.url}
+        poster={heroPoster.url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        disablePictureInPicture
+        tabIndex={-1}
+      />
+      <img
+        src={heroPoster.url}
+        alt=""
+        className="absolute inset-0 hidden h-full w-full object-cover opacity-70 motion-reduce:block"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_18%,color-mix(in_oklab,var(--background)_72%,transparent)_58%,color-mix(in_oklab,var(--background)_45%,transparent)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
     </div>
   );
 }
+
 
 
 function CapturePage() {
