@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, Clock, Eye, Minus } from "lucide-react";
 
 import { Container, GoldRule, Section } from "@/components/ds/container";
-import { IrisGlow, IrisMark } from "@/components/ds/iris";
+import { IrisGlow } from "@/components/ds/iris";
+import heroVideo from "@/assets/hero-eye.mp4.asset.json";
+import heroPoster from "@/assets/hero-eye-poster.jpg.asset.json";
 import { Reveal } from "@/components/ds/reveal";
 import { LeadForm } from "@/components/capture/lead-form";
 import {
@@ -71,32 +73,32 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
   );
 }
 
-function IrisVisual({ src, alt }: { src?: string | undefined; alt: string }) {
+function HeroBackdrop() {
   return (
-    <div className="relative isolate mx-auto w-full max-w-[18rem] sm:max-w-[22rem] lg:max-w-[24rem] xl:max-w-[26rem]">
-      {src ? (
-        <figure className="relative mx-auto aspect-square w-full overflow-hidden rounded-full ring-1 ring-primary/20">
-          <img src={src} alt={alt} className="h-full w-full object-cover" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_38%,color-mix(in_oklab,var(--background)_88%,transparent)_100%)]"
-          />
-        </figure>
-      ) : (
-        <div className="relative flex aspect-square w-full items-center justify-center">
-          <IrisMark
-            size="100%"
-            className="animate-[spin_140s_linear_infinite] opacity-90 motion-reduce:animate-none"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,transparent_40%,var(--background)_88%)]"
-          />
-        </div>
-      )}
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <video
+        className="h-full w-full object-cover opacity-70 motion-reduce:hidden"
+        src={heroVideo.url}
+        poster={heroPoster.url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        disablePictureInPicture
+        tabIndex={-1}
+      />
+      <img
+        src={heroPoster.url}
+        alt=""
+        className="absolute inset-0 hidden h-full w-full object-cover opacity-70 motion-reduce:block"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_18%,color-mix(in_oklab,var(--background)_72%,transparent)_58%,color-mix(in_oklab,var(--background)_45%,transparent)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
     </div>
   );
 }
+
 
 
 function CapturePage() {
@@ -124,20 +126,22 @@ function CapturePage() {
       </Container>
 
       {/* HERO */}
-      <Section id="inscricao" className="relative pt-2 pb-12 sm:pt-4 lg:pt-6 lg:pb-20">
+      <Section
+        id="inscricao"
+        className="relative isolate overflow-hidden pt-8 pb-16 sm:pt-10 lg:pt-16 lg:pb-24"
+      >
+        <HeroBackdrop />
         <Container width="wide">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+          <div className="max-w-2xl">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4 max-w-[24rem] sm:max-w-[38rem] lg:max-w-none">
+              <div className="mt-4">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 max-w-[40rem] lg:text-[1.075rem] lg:leading-[1.6]">
-                {hero.body}
-              </p>
+              <p className="text-lede mt-6 lg:text-[1.075rem] lg:leading-[1.6]">{hero.body}</p>
 
               <div className="mt-7">
                 <DateStamp date={dateLabel} time={timeLabel} />
@@ -145,7 +149,7 @@ function CapturePage() {
 
               <GoldRule className="my-7 max-w-md" />
 
-              <div className="min-w-0 max-w-lg rounded-sm border border-gold/25 bg-surface-raised/80 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7 lg:max-w-none">
+              <div className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/85 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
                 <div className="mt-5">
                   <LeadForm
@@ -156,13 +160,6 @@ function CapturePage() {
                   />
                 </div>
               </div>
-            </Reveal>
-
-            <Reveal delay={120} className="min-w-0 lg:pl-2">
-              <IrisVisual
-                src={hero.media_url}
-                alt="Macrofotografia de uma íris humana em detalhe"
-              />
             </Reveal>
           </div>
         </Container>
