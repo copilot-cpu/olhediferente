@@ -76,10 +76,10 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* O vídeo ocupa a faixa direita da composição; no mobile cobre o topo. */}
-      <div className="absolute inset-y-0 right-0 h-full w-full lg:w-[52%]">
+      {/* O vídeo cobre toda a dobra, com o olho centralizado. */}
+      <div className="absolute inset-0">
         <video
-          className="h-full w-full object-cover opacity-95 motion-reduce:hidden [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+          className="h-full w-full object-cover object-center opacity-95 motion-reduce:hidden"
           src={heroVideo.url}
           poster={heroPoster.url}
           autoPlay
@@ -93,15 +93,17 @@ function HeroBackdrop() {
         <img
           src={heroPoster.url}
           alt=""
-          className="absolute inset-0 hidden h-full w-full object-cover opacity-95 motion-reduce:block [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+          className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-95 motion-reduce:block"
         />
       </div>
-      {/* Véu apenas o suficiente para legibilidade do texto à esquerda. */}
-      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_30%,color-mix(in_oklab,var(--background)_62%,transparent)_55%,color-mix(in_oklab,var(--background)_12%,transparent)_100%)] lg:bg-[linear-gradient(100deg,var(--background)_38%,color-mix(in_oklab,var(--background)_45%,transparent)_60%,transparent_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
+      {/* Véus laterais: escurecem só o suficiente atrás do texto e do formulário. */}
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_0%,color-mix(in_oklab,var(--background)_78%,transparent)_22%,color-mix(in_oklab,var(--background)_20%,transparent)_46%,color-mix(in_oklab,var(--background)_20%,transparent)_58%,color-mix(in_oklab,var(--background)_82%,transparent)_82%,var(--background)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_45%,transparent_35%,color-mix(in_oklab,var(--background)_55%,transparent)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
     </div>
   );
 }
+
 
 
 
@@ -133,12 +135,12 @@ function CapturePage() {
       {/* HERO */}
       <Section
         id="inscricao"
-        className="relative isolate overflow-hidden pt-6 pb-14 sm:pt-8 lg:pt-10 lg:pb-20"
+        className="relative isolate flex items-center overflow-hidden pt-4 pb-12 sm:pt-6 lg:min-h-[calc(100svh-5.5rem)] lg:pt-6 lg:pb-10"
       >
         <HeroBackdrop />
-        <Container width="wide">
-          <div className="max-w-xl">
-            <Reveal className="min-w-0">
+        <Container width="wide" className="w-full">
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
+            <Reveal className="min-w-0 max-w-xl">
               <p className="text-overline">{hero.subtitle}</p>
               <div className="mt-3">
                 <Headline
@@ -146,30 +148,33 @@ function CapturePage() {
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-4 lg:text-[1.05rem] lg:leading-[1.55]">{hero.body}</p>
+              <p className="text-lede mt-4 lg:text-[1rem] lg:leading-[1.5]">{hero.body}</p>
 
-              <div className="mt-4">
+              <div className="mt-5">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-5 max-w-md" />
+              <GoldRule className="mt-6 max-w-xs" />
+            </Reveal>
 
-
-              <div className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/85 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
-                <h2 className="text-heading text-foreground">{form.title}</h2>
-                <div className="mt-5">
-                  <LeadForm
-                    idPrefix="hero"
-                    source="capture_hero"
-                    ctaLabel={form.subtitle ?? "QUERO MINHA VAGA GRATUITA"}
-                    microcopy={microcopy}
-                  />
-                </div>
+            <Reveal
+              delay={80}
+              className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/90 p-5 backdrop-blur-md shadow-[var(--shadow-elevated)] sm:p-6"
+            >
+              <h2 className="text-heading text-foreground">{form.title}</h2>
+              <div className="mt-4">
+                <LeadForm
+                  idPrefix="hero"
+                  source="capture_hero"
+                  ctaLabel={form.subtitle ?? "QUERO MINHA VAGA GRATUITA"}
+                  microcopy={microcopy}
+                />
               </div>
             </Reveal>
           </div>
         </Container>
       </Section>
+
 
       {/* A GRANDE PERGUNTA */}
       <Section className="relative border-t border-primary/20 bg-surface-raised">
