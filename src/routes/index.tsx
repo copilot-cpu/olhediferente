@@ -76,10 +76,10 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* O vídeo ocupa a faixa direita da composição; no mobile cobre o topo. */}
-      <div className="absolute inset-y-0 right-0 h-full w-full lg:w-[52%]">
+      {/* O vídeo cobre toda a dobra, com o olho centralizado. */}
+      <div className="absolute inset-0">
         <video
-          className="h-full w-full object-cover opacity-95 motion-reduce:hidden [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+          className="h-full w-full object-cover object-center opacity-95 motion-reduce:hidden"
           src={heroVideo.url}
           poster={heroPoster.url}
           autoPlay
@@ -93,15 +93,17 @@ function HeroBackdrop() {
         <img
           src={heroPoster.url}
           alt=""
-          className="absolute inset-0 hidden h-full w-full object-cover opacity-95 motion-reduce:block [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+          className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-95 motion-reduce:block"
         />
       </div>
-      {/* Véu apenas o suficiente para legibilidade do texto à esquerda. */}
-      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_30%,color-mix(in_oklab,var(--background)_62%,transparent)_55%,color-mix(in_oklab,var(--background)_12%,transparent)_100%)] lg:bg-[linear-gradient(100deg,var(--background)_38%,color-mix(in_oklab,var(--background)_45%,transparent)_60%,transparent_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
+      {/* Véus laterais: escurecem só o suficiente atrás do texto e do formulário. */}
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_0%,color-mix(in_oklab,var(--background)_78%,transparent)_22%,color-mix(in_oklab,var(--background)_20%,transparent)_46%,color-mix(in_oklab,var(--background)_20%,transparent)_58%,color-mix(in_oklab,var(--background)_82%,transparent)_82%,var(--background)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_45%,transparent_35%,color-mix(in_oklab,var(--background)_55%,transparent)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
     </div>
   );
 }
+
 
 
 
