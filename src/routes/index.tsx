@@ -76,28 +76,33 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <video
-        className="h-full w-full object-cover opacity-70 motion-reduce:hidden"
-        src={heroVideo.url}
-        poster={heroPoster.url}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        disablePictureInPicture
-        tabIndex={-1}
-      />
-      <img
-        src={heroPoster.url}
-        alt=""
-        className="absolute inset-0 hidden h-full w-full object-cover opacity-70 motion-reduce:block"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_18%,color-mix(in_oklab,var(--background)_72%,transparent)_58%,color-mix(in_oklab,var(--background)_45%,transparent)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
+      {/* O vídeo ocupa a faixa direita da composição; no mobile cobre o topo. */}
+      <div className="absolute inset-y-0 right-0 h-full w-full lg:w-[52%]">
+        <video
+          className="h-full w-full object-cover opacity-95 motion-reduce:hidden [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+          src={heroVideo.url}
+          poster={heroPoster.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          disablePictureInPicture
+          tabIndex={-1}
+        />
+        <img
+          src={heroPoster.url}
+          alt=""
+          className="absolute inset-0 hidden h-full w-full object-cover opacity-95 motion-reduce:block [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+        />
+      </div>
+      {/* Véu apenas o suficiente para legibilidade do texto à esquerda. */}
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_30%,color-mix(in_oklab,var(--background)_62%,transparent)_55%,color-mix(in_oklab,var(--background)_12%,transparent)_100%)] lg:bg-[linear-gradient(100deg,var(--background)_38%,color-mix(in_oklab,var(--background)_45%,transparent)_60%,transparent_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
     </div>
   );
 }
+
 
 
 
@@ -128,26 +133,27 @@ function CapturePage() {
       {/* HERO */}
       <Section
         id="inscricao"
-        className="relative isolate overflow-hidden pt-8 pb-16 sm:pt-10 lg:pt-16 lg:pb-24"
+        className="relative isolate overflow-hidden pt-6 pb-14 sm:pt-8 lg:pt-10 lg:pb-20"
       >
         <HeroBackdrop />
         <Container width="wide">
-          <div className="max-w-2xl">
+          <div className="max-w-xl">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4">
+              <div className="mt-3">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 lg:text-[1.075rem] lg:leading-[1.6]">{hero.body}</p>
+              <p className="text-lede mt-4 lg:text-[1.05rem] lg:leading-[1.55]">{hero.body}</p>
 
-              <div className="mt-7">
+              <div className="mt-4">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-7 max-w-md" />
+              <GoldRule className="my-5 max-w-md" />
+
 
               <div className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/85 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
