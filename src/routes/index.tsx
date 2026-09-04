@@ -135,12 +135,12 @@ function CapturePage() {
       {/* HERO */}
       <Section
         id="inscricao"
-        className="relative isolate overflow-hidden pt-6 pb-14 sm:pt-8 lg:pt-10 lg:pb-20"
+        className="relative isolate flex items-center overflow-hidden pt-4 pb-12 sm:pt-6 lg:min-h-[calc(100svh-5.5rem)] lg:pt-6 lg:pb-10"
       >
         <HeroBackdrop />
-        <Container width="wide">
-          <div className="max-w-xl">
-            <Reveal className="min-w-0">
+        <Container width="wide" className="w-full">
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
+            <Reveal className="min-w-0 max-w-xl">
               <p className="text-overline">{hero.subtitle}</p>
               <div className="mt-3">
                 <Headline
@@ -148,30 +148,33 @@ function CapturePage() {
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-4 lg:text-[1.05rem] lg:leading-[1.55]">{hero.body}</p>
+              <p className="text-lede mt-4 lg:text-[1rem] lg:leading-[1.5]">{hero.body}</p>
 
-              <div className="mt-4">
+              <div className="mt-5">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-5 max-w-md" />
+              <GoldRule className="mt-6 max-w-xs" />
+            </Reveal>
 
-
-              <div className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/85 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
-                <h2 className="text-heading text-foreground">{form.title}</h2>
-                <div className="mt-5">
-                  <LeadForm
-                    idPrefix="hero"
-                    source="capture_hero"
-                    ctaLabel={form.subtitle ?? "QUERO MINHA VAGA GRATUITA"}
-                    microcopy={microcopy}
-                  />
-                </div>
+            <Reveal
+              delay={80}
+              className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/90 p-5 backdrop-blur-md shadow-[var(--shadow-elevated)] sm:p-6"
+            >
+              <h2 className="text-heading text-foreground">{form.title}</h2>
+              <div className="mt-4">
+                <LeadForm
+                  idPrefix="hero"
+                  source="capture_hero"
+                  ctaLabel={form.subtitle ?? "QUERO MINHA VAGA GRATUITA"}
+                  microcopy={microcopy}
+                />
               </div>
             </Reveal>
           </div>
         </Container>
       </Section>
+
 
       {/* A GRANDE PERGUNTA */}
       <Section className="relative border-t border-primary/20 bg-surface-raised">
