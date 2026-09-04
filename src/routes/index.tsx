@@ -133,26 +133,27 @@ function CapturePage() {
       {/* HERO */}
       <Section
         id="inscricao"
-        className="relative isolate overflow-hidden pt-8 pb-16 sm:pt-10 lg:pt-16 lg:pb-24"
+        className="relative isolate overflow-hidden pt-6 pb-14 sm:pt-8 lg:pt-10 lg:pb-20"
       >
         <HeroBackdrop />
         <Container width="wide">
-          <div className="max-w-2xl">
+          <div className="max-w-xl">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4">
+              <div className="mt-3">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 lg:text-[1.075rem] lg:leading-[1.6]">{hero.body}</p>
+              <p className="text-lede mt-4 lg:text-[1.05rem] lg:leading-[1.55]">{hero.body}</p>
 
-              <div className="mt-7">
+              <div className="mt-4">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
 
-              <GoldRule className="my-7 max-w-md" />
+              <GoldRule className="my-5 max-w-md" />
+
 
               <div className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/85 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
