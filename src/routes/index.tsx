@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, Clock, Eye, Minus } from "lucide-react";
 
 import { Container, GoldRule, Section } from "@/components/ds/container";
-import { IrisGlow, IrisMark } from "@/components/ds/iris";
+import { IrisGlow } from "@/components/ds/iris";
+import heroVideo from "@/assets/hero-eye.mp4.asset.json";
+import heroPoster from "@/assets/hero-eye-poster.jpg.asset.json";
 import { Reveal } from "@/components/ds/reveal";
 import { LeadForm } from "@/components/capture/lead-form";
 import {
