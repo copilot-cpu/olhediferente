@@ -76,28 +76,33 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
 function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      <video
-        className="h-full w-full object-cover opacity-70 motion-reduce:hidden"
-        src={heroVideo.url}
-        poster={heroPoster.url}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        disablePictureInPicture
-        tabIndex={-1}
-      />
-      <img
-        src={heroPoster.url}
-        alt=""
-        className="absolute inset-0 hidden h-full w-full object-cover opacity-70 motion-reduce:block"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_18%,color-mix(in_oklab,var(--background)_72%,transparent)_58%,color-mix(in_oklab,var(--background)_45%,transparent)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
+      {/* O vídeo ocupa a faixa direita da composição; no mobile cobre o topo. */}
+      <div className="absolute inset-y-0 right-0 h-full w-full lg:w-[52%]">
+        <video
+          className="h-full w-full object-cover opacity-95 motion-reduce:hidden [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+          src={heroVideo.url}
+          poster={heroPoster.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          disablePictureInPicture
+          tabIndex={-1}
+        />
+        <img
+          src={heroPoster.url}
+          alt=""
+          className="absolute inset-0 hidden h-full w-full object-cover opacity-95 motion-reduce:block [mask-image:linear-gradient(to_right,transparent,black_22%,black_100%)]"
+        />
+      </div>
+      {/* Véu apenas o suficiente para legibilidade do texto à esquerda. */}
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_30%,color-mix(in_oklab,var(--background)_62%,transparent)_55%,color-mix(in_oklab,var(--background)_12%,transparent)_100%)] lg:bg-[linear-gradient(100deg,var(--background)_38%,color-mix(in_oklab,var(--background)_45%,transparent)_60%,transparent_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent,var(--background))]" />
     </div>
   );
 }
+
 
 
 
