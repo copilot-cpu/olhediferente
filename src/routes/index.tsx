@@ -126,20 +126,22 @@ function CapturePage() {
       </Container>
 
       {/* HERO */}
-      <Section id="inscricao" className="relative pt-2 pb-12 sm:pt-4 lg:pt-6 lg:pb-20">
+      <Section
+        id="inscricao"
+        className="relative isolate overflow-hidden pt-8 pb-16 sm:pt-10 lg:pt-16 lg:pb-24"
+      >
+        <HeroBackdrop />
         <Container width="wide">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+          <div className="max-w-2xl">
             <Reveal className="min-w-0">
               <p className="text-overline">{hero.subtitle}</p>
-              <div className="mt-4 max-w-[24rem] sm:max-w-[38rem] lg:max-w-none">
+              <div className="mt-4">
                 <Headline
                   text={hero.title ?? ""}
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-6 max-w-[40rem] lg:text-[1.075rem] lg:leading-[1.6]">
-                {hero.body}
-              </p>
+              <p className="text-lede mt-6 lg:text-[1.075rem] lg:leading-[1.6]">{hero.body}</p>
 
               <div className="mt-7">
                 <DateStamp date={dateLabel} time={timeLabel} />
@@ -147,7 +149,7 @@ function CapturePage() {
 
               <GoldRule className="my-7 max-w-md" />
 
-              <div className="min-w-0 max-w-lg rounded-sm border border-gold/25 bg-surface-raised/80 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7 lg:max-w-none">
+              <div className="min-w-0 rounded-sm border border-gold/25 bg-surface-raised/85 p-6 backdrop-blur shadow-[var(--shadow-elevated)] sm:p-7">
                 <h2 className="text-heading text-foreground">{form.title}</h2>
                 <div className="mt-5">
                   <LeadForm
@@ -158,13 +160,6 @@ function CapturePage() {
                   />
                 </div>
               </div>
-            </Reveal>
-
-            <Reveal delay={120} className="min-w-0 lg:pl-2">
-              <IrisVisual
-                src={hero.media_url}
-                alt="Macrofotografia de uma íris humana em detalhe"
-              />
             </Reveal>
           </div>
         </Container>
