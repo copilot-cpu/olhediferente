@@ -6,7 +6,7 @@ O olho/íris que hoje aparece à direita do topo sai. No lugar, o vídeo que voc
 
 - Roda sozinho, em loop contínuo, sem som e sem nenhum controle de player na tela.
 - Cobre toda a largura e altura do topo, cortando o excesso para não deformar a imagem.
-- Sobre o vídeo entra um véu escuro em degradê (verde muito escuro da identidade), para o título, a data e o formulário continuarem perfeitamente legíveis.
+- Sobre o vídeo entra um véu escuro em degradê (verde escuro da identidade), para o título, a data e o formulário continuarem perfeitamente legíveis.
 - O topo passa a ter uma coluna só, com o texto e o formulário alinhados à esquerda e o formulário ganhando ainda mais destaque sobre o vídeo.
 
 ## Detalhes de comportamento
