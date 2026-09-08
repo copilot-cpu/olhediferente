@@ -148,7 +148,7 @@ function CapturePage() {
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-4 lg:text-[1rem] lg:leading-[1.5]">{hero.body}</p>
+              <p className="whitespace-pre-line text-lede mt-4 lg:text-[1rem] lg:leading-[1.5]">{hero.body}</p>
 
               <div className="mt-5">
                 <DateStamp date={dateLabel} time={timeLabel} />
@@ -219,7 +219,7 @@ function CapturePage() {
                   </span>
                   <div>
                     <h3 className="text-heading text-foreground">{item.title}</h3>
-                    <p className="text-lede mt-3 max-w-2xl">{item.body}</p>
+                    <p className="whitespace-pre-line text-lede mt-3 max-w-2xl">{item.body}</p>
 
                     {item.steps ? (
                       <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -323,7 +323,7 @@ function CapturePage() {
 
             <Reveal delay={100} className="space-y-6">
               {field<string[]>("teacher", "paragraphs", []).map((paragraph) => (
-                <p key={paragraph} className="text-lede">
+                <p key={paragraph} className="whitespace-pre-line text-lede">
                   {paragraph}
                 </p>
               ))}
@@ -337,7 +337,7 @@ function CapturePage() {
                   </li>
                 ))}
               </ul>
-              <p className="font-display text-xl leading-relaxed text-foreground sm:text-2xl">
+              <p className="whitespace-pre-line font-display text-xl leading-relaxed text-foreground sm:text-2xl">
                 {field("teacher", "closing", "")}
               </p>
             </Reveal>
@@ -357,12 +357,12 @@ function CapturePage() {
             <GoldRule className="my-10 max-w-sm" />
             <div className="max-w-2xl space-y-6">
               {field<string[]>("manifesto", "paragraphs", []).map((paragraph) => (
-                <p key={paragraph} className="text-lede">
+                <p key={paragraph} className="whitespace-pre-line text-lede">
                   {paragraph}
                 </p>
               ))}
             </div>
-            <p className="mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
+            <p className="whitespace-pre-line mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
               {block("manifesto").body}
             </p>
           </Reveal>
@@ -375,7 +375,7 @@ function CapturePage() {
           <div className="grid min-w-0 items-start gap-12 lg:grid-cols-2">
             <Reveal>
               <h2 className="text-title text-foreground">{block("second_capture").title}</h2>
-              <p className="text-lede mt-5 max-w-lg">{block("second_capture").body}</p>
+              <p className="whitespace-pre-line text-lede mt-5 max-w-lg">{block("second_capture").body}</p>
               <div className="mt-8">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
@@ -407,7 +407,7 @@ function CapturePage() {
                   <AccordionTrigger className="font-display text-base text-foreground hover:no-underline sm:text-lg">
                     {item.q}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                  <AccordionContent className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
                     {item.a}
                   </AccordionContent>
                 </AccordionItem>
@@ -424,9 +424,9 @@ function CapturePage() {
             <h2 className="text-title mx-auto max-w-3xl text-foreground">
               {block("final_cta").title}
             </h2>
-            <p className="text-lede mx-auto mt-4 max-w-2xl">{block("final_cta").subtitle}</p>
+            <p className="whitespace-pre-line text-lede mx-auto mt-4 max-w-2xl">{block("final_cta").subtitle}</p>
             <GoldRule className="mx-auto my-10 max-w-xs" />
-            <p className="mx-auto max-w-xl text-base text-foreground/90">
+            <p className="whitespace-pre-line mx-auto max-w-xl text-base text-foreground/90">
               {block("final_cta").body}
             </p>
             <p className="mx-auto mt-8 max-w-2xl font-display text-2xl leading-snug text-primary sm:text-3xl">
