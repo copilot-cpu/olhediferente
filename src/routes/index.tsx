@@ -16,6 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useCaptureContent } from "@/lib/capture-content";
+import { useMediaUrl } from "@/lib/media";
+import { SeoFromSettings } from "@/lib/seo";
+
+
 
 const title = "OLHE DIFERENTE — Aula gratuita de Iridologia com o Prof. Marcos Dias";
 const description =
@@ -73,7 +77,8 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
   );
 }
 
-function HeroBackdrop() {
+function HeroBackdrop({ fallbackImage }: { fallbackImage?: string | null }) {
+  const poster = fallbackImage || heroPoster.url;
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       {/* O vídeo cobre toda a dobra, com o olho centralizado. */}
@@ -81,7 +86,7 @@ function HeroBackdrop() {
         <video
           className="h-full w-full object-cover object-center opacity-95 motion-reduce:hidden"
           src={heroVideo.url}
-          poster={heroPoster.url}
+          poster={poster}
           autoPlay
           muted
           loop
@@ -91,11 +96,12 @@ function HeroBackdrop() {
           tabIndex={-1}
         />
         <img
-          src={heroPoster.url}
+          src={poster}
           alt=""
           className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-95 motion-reduce:block"
         />
       </div>
+
       {/* Véus laterais: escurecem só o suficiente atrás do texto e do formulário. */}
       <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_0%,color-mix(in_oklab,var(--background)_78%,transparent)_22%,color-mix(in_oklab,var(--background)_20%,transparent)_46%,color-mix(in_oklab,var(--background)_20%,transparent)_58%,color-mix(in_oklab,var(--background)_82%,transparent)_82%,var(--background)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_45%,transparent_35%,color-mix(in_oklab,var(--background)_55%,transparent)_100%)]" />
@@ -117,10 +123,15 @@ function CapturePage() {
   const dateLabel = field("hero", "date_label", "[DATA DA AULA]");
   const timeLabel = field("hero", "time_label", "[HORÁRIO]");
   const microcopy = form.body ?? "";
+  const heroFallback = useMediaUrl(hero.media_url);
+  const teacherPhoto = useMediaUrl(block("teacher").media_url);
+
 
   return (
     <main className="relative min-h-screen overflow-x-hidden">
+      <SeoFromSettings />
       <IrisGlow />
+
 
       {/* Cabeçalho: apenas a marca. Nenhum acesso administrativo é exposto ao visitante. */}
       <Container width="wide" className="relative flex items-center justify-between py-6">
@@ -137,7 +148,7 @@ function CapturePage() {
         id="inscricao"
         className="relative isolate flex items-center overflow-hidden pt-4 pb-12 sm:pt-6 lg:min-h-[calc(100svh-5.5rem)] lg:pt-6 lg:pb-10"
       >
-        <HeroBackdrop />
+        <HeroBackdrop fallbackImage={heroFallback} />
         <Container width="wide" className="w-full">
           <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
             <Reveal className="min-w-0 max-w-xl">
@@ -148,7 +159,7 @@ function CapturePage() {
                   highlight={field("hero", "highlight", "NOVA FONTE DE RECEITA")}
                 />
               </div>
-              <p className="text-lede mt-4 lg:text-[1rem] lg:leading-[1.5]">{hero.body}</p>
+              <p className="whitespace-pre-line text-lede mt-4 lg:text-[1rem] lg:leading-[1.5]">{hero.body}</p>
 
               <div className="mt-5">
                 <DateStamp date={dateLabel} time={timeLabel} />
@@ -188,9 +199,10 @@ function CapturePage() {
                   key={paragraph}
                   className={
                     index >= 4
-                      ? "font-display text-xl leading-relaxed text-foreground sm:text-2xl"
-                      : "text-lede"
+                      ? "whitespace-pre-line font-display text-xl leading-relaxed text-foreground sm:text-2xl"
+                      : "whitespace-pre-line text-lede"
                   }
+
                 >
                   {paragraph}
                 </p>
@@ -219,7 +231,7 @@ function CapturePage() {
                   </span>
                   <div>
                     <h3 className="text-heading text-foreground">{item.title}</h3>
-                    <p className="text-lede mt-3 max-w-2xl">{item.body}</p>
+                    <p className="whitespace-pre-line text-lede mt-3 max-w-2xl">{item.body}</p>
 
                     {item.steps ? (
                       <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -254,7 +266,7 @@ function CapturePage() {
             {field<string[]>("audience", "items", []).map((item, index) => (
               <Reveal as="li" key={item} delay={index * 40} className="flex gap-4">
                 <Eye className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
-                <span className="text-base leading-relaxed text-foreground/90">{item}</span>
+                <span className="whitespace-pre-line text-base leading-relaxed text-foreground/90">{item}</span>
               </Reveal>
             ))}
           </ul>
@@ -268,7 +280,7 @@ function CapturePage() {
             <h2 className="text-heading text-muted-foreground">{block("not_audience").title}</h2>
             <ul className="mt-6 space-y-3">
               {field<string[]>("not_audience", "items", []).map((item) => (
-                <li key={item} className="flex gap-4 text-base text-muted-foreground">
+                <li key={item} className="flex gap-4 whitespace-pre-line text-base text-muted-foreground">
                   <Minus className="mt-2 size-3 shrink-0 text-muted-foreground/60" aria-hidden />
                   {item}
                 </li>
@@ -295,9 +307,10 @@ function CapturePage() {
               <h2 className="text-title mt-3 text-foreground">{block("teacher").subtitle}</h2>
 
               <div className="mt-8 overflow-hidden rounded-sm border border-border/60 bg-card/40">
-                {block("teacher").media_url ? (
+                {teacherPhoto ? (
                   <img
-                    src={block("teacher").media_url}
+                    src={teacherPhoto}
+
                     alt="Professor Marcos Dias"
                     loading="lazy"
                     className="aspect-[4/5] w-full object-cover"
@@ -323,7 +336,7 @@ function CapturePage() {
 
             <Reveal delay={100} className="space-y-6">
               {field<string[]>("teacher", "paragraphs", []).map((paragraph) => (
-                <p key={paragraph} className="text-lede">
+                <p key={paragraph} className="whitespace-pre-line text-lede">
                   {paragraph}
                 </p>
               ))}
@@ -337,7 +350,7 @@ function CapturePage() {
                   </li>
                 ))}
               </ul>
-              <p className="font-display text-xl leading-relaxed text-foreground sm:text-2xl">
+              <p className="whitespace-pre-line font-display text-xl leading-relaxed text-foreground sm:text-2xl">
                 {field("teacher", "closing", "")}
               </p>
             </Reveal>
@@ -357,12 +370,12 @@ function CapturePage() {
             <GoldRule className="my-10 max-w-sm" />
             <div className="max-w-2xl space-y-6">
               {field<string[]>("manifesto", "paragraphs", []).map((paragraph) => (
-                <p key={paragraph} className="text-lede">
+                <p key={paragraph} className="whitespace-pre-line text-lede">
                   {paragraph}
                 </p>
               ))}
             </div>
-            <p className="mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
+            <p className="whitespace-pre-line mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
               {block("manifesto").body}
             </p>
           </Reveal>
@@ -375,7 +388,7 @@ function CapturePage() {
           <div className="grid min-w-0 items-start gap-12 lg:grid-cols-2">
             <Reveal>
               <h2 className="text-title text-foreground">{block("second_capture").title}</h2>
-              <p className="text-lede mt-5 max-w-lg">{block("second_capture").body}</p>
+              <p className="whitespace-pre-line text-lede mt-5 max-w-lg">{block("second_capture").body}</p>
               <div className="mt-8">
                 <DateStamp date={dateLabel} time={timeLabel} />
               </div>
@@ -407,7 +420,7 @@ function CapturePage() {
                   <AccordionTrigger className="font-display text-base text-foreground hover:no-underline sm:text-lg">
                     {item.q}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                  <AccordionContent className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
                     {item.a}
                   </AccordionContent>
                 </AccordionItem>
@@ -424,9 +437,9 @@ function CapturePage() {
             <h2 className="text-title mx-auto max-w-3xl text-foreground">
               {block("final_cta").title}
             </h2>
-            <p className="text-lede mx-auto mt-4 max-w-2xl">{block("final_cta").subtitle}</p>
+            <p className="whitespace-pre-line text-lede mx-auto mt-4 max-w-2xl">{block("final_cta").subtitle}</p>
             <GoldRule className="mx-auto my-10 max-w-xs" />
-            <p className="mx-auto max-w-xl text-base text-foreground/90">
+            <p className="whitespace-pre-line mx-auto max-w-xl text-base text-foreground/90">
               {block("final_cta").body}
             </p>
             <p className="mx-auto mt-8 max-w-2xl font-display text-2xl leading-snug text-primary sm:text-3xl">
@@ -447,7 +460,8 @@ function CapturePage() {
       <footer className="border-t border-border/60 py-10">
         <Container width="wide" className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-display text-sm uppercase tracking-[0.3em] text-primary">
-            Olhe Diferente
+            {site.projectName}
+
           </span>
           <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
             {site.footerText || `Professor ${site.teacherName}`}

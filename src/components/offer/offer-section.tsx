@@ -89,7 +89,7 @@ export function OfferSection() {
               <h2 className="text-title mt-4 text-cream">{transition.title}</h2>
               <p className="text-lede mt-4">{transition.subtitle}</p>
               <GoldRule className="my-8" />
-              <p className="text-base leading-relaxed text-cream/85">{transition.body}</p>
+              <p className="whitespace-pre-line text-base leading-relaxed text-cream/85">{transition.body}</p>
             </Editorial>
           </Reveal>
         </Container>
@@ -106,7 +106,7 @@ export function OfferSection() {
               </p>
               <h2 className="text-display mt-3 text-forest-deep">{presentation.subtitle}</h2>
               <GoldRule className="mx-auto my-8 max-w-xs" />
-              <p className="mx-auto max-w-[62ch] text-base leading-relaxed text-forest-deep/80 sm:text-lg">
+              <p className="whitespace-pre-line mx-auto max-w-[62ch] text-base leading-relaxed text-forest-deep/80 sm:text-lg">
                 {presentation.body}
               </p>
             </div>
@@ -138,7 +138,7 @@ export function OfferSection() {
             <Editorial>
               <p className="text-overline">{field("mechanism", "eyebrow", "")}</p>
               <h2 className="text-title mt-4 text-cream">{mechanism.title}</h2>
-              <p className="mt-4 text-base leading-relaxed text-cream/80">{mechanism.body}</p>
+              <p className="whitespace-pre-line mt-4 text-base leading-relaxed text-cream/80">{mechanism.body}</p>
             </Editorial>
           </Reveal>
 
@@ -156,7 +156,7 @@ export function OfferSection() {
                   {step.number}
                 </span>
                 <h3 className="font-display text-xl text-cream sm:text-2xl">{step.title}</h3>
-                <p className="mt-1 font-sans text-sm text-primary/80">{step.body}</p>
+                <p className="whitespace-pre-line mt-1 font-sans text-sm text-primary/80">{step.body}</p>
               </Reveal>
             ))}
           </ol>
@@ -169,7 +169,7 @@ export function OfferSection() {
           <Reveal>
             <Editorial>
               <h2 className="text-title text-cream">{problem.title}</h2>
-              <p className="mt-6 text-base text-cream/85">{problem.body}</p>
+              <p className="whitespace-pre-line mt-6 text-base text-cream/85">{problem.body}</p>
               <ul className="mt-4 space-y-2">
                 {field<string[]>("problem", "items", []).map((item) => (
                   <li key={item} className="flex gap-3 text-base text-cream/80">
@@ -244,7 +244,7 @@ export function OfferSection() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-6 text-base leading-relaxed text-cream/80">{structure.body}</p>
+                <p className="whitespace-pre-line mt-6 text-base leading-relaxed text-cream/80">{structure.body}</p>
                 <p className="mt-6 inline-block border border-primary/35 px-4 py-2 font-sans text-xs uppercase tracking-[0.18em] text-primary">
                   {field("structure", "highlight", "")}
                 </p>
@@ -319,7 +319,7 @@ export function OfferSection() {
             <Editorial>
               <h2 className="text-title text-cream">{live.title}</h2>
               <p className="text-title text-primary">{live.subtitle}</p>
-              <p className="mt-6 text-base text-cream/85">{live.body}</p>
+              <p className="whitespace-pre-line mt-6 text-base text-cream/85">{live.body}</p>
               <ul className="mt-4 grid gap-2 sm:grid-cols-2">
                 {field<string[]>("live", "items", []).map((item) => (
                   <li key={item} className="flex gap-3 text-base text-cream/80">
@@ -342,7 +342,7 @@ export function OfferSection() {
           <Reveal>
             <Editorial>
               <h2 className="text-title text-cream">{progress.title}</h2>
-              <p className="mt-5 text-base text-cream/85">{progress.body}</p>
+              <p className="whitespace-pre-line mt-5 text-base text-cream/85">{progress.body}</p>
             </Editorial>
           </Reveal>
           <ul className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-2">
@@ -379,7 +379,7 @@ export function OfferSection() {
                       <h3 className="font-sans text-sm font-medium uppercase tracking-[0.08em] text-forest-deep">
                         {item.title}
                       </h3>
-                      <p className="mt-1 text-sm leading-relaxed text-forest-deep/75">
+                      <p className="whitespace-pre-line mt-1 text-sm leading-relaxed text-forest-deep/75">
                         {item.body}
                       </p>
                     </div>
@@ -496,7 +496,7 @@ export function OfferSection() {
               <div>
                 <h2 className="text-title text-cream">{teacher.title}</h2>
                 <p className="mt-6 font-display text-2xl text-primary">{teacher.subtitle}</p>
-                <p className="font-sans text-sm uppercase tracking-[0.16em] text-cream/65">
+                <p className="whitespace-pre-line font-sans text-sm uppercase tracking-[0.16em] text-cream/65">
                   {teacher.body}
                 </p>
                 <div className="mt-5 space-y-3">
@@ -540,7 +540,7 @@ export function OfferSection() {
                 <p className="mt-2 text-sm text-cream/80">{offer.installments}</p>
               ) : null}
               {offerBlock.guarantee ? (
-                <p className="mt-2 text-sm text-cream/80">{offerBlock.guarantee}</p>
+                <p className="whitespace-pre-line mt-2 text-sm text-cream/80">{offerBlock.guarantee}</p>
               ) : null}
 
               <div className="mx-auto mt-7 max-w-sm">
@@ -591,7 +591,7 @@ export function OfferSection() {
               <p className="mt-3 font-display text-xl text-forest-deep/70 sm:text-2xl">
                 {closing.subtitle}
               </p>
-              <p className="mx-auto mt-6 max-w-[60ch] text-base leading-relaxed text-forest-deep/80">
+              <p className="whitespace-pre-line mx-auto mt-6 max-w-[60ch] text-base leading-relaxed text-forest-deep/80">
                 {closing.body}
               </p>
               <div className="mx-auto mt-8 max-w-sm">

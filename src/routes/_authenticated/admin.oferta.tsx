@@ -11,6 +11,7 @@ import {
   PreviewLink,
   Repeater,
   SaveBar,
+  StickySaveBar,
   StringListEditor,
   TextField,
   type FaqItem,
@@ -80,6 +81,8 @@ function AdminOfferPage() {
   const queryClient = useQueryClient();
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [blocks, setBlocks] = useState<Blocks | null>(null);
+  const [dirty, setDirty] = useState(false);
+
 
   const rowsQuery = useQuery({
     queryKey: ["admin-offer-content"],
@@ -120,6 +123,7 @@ function AdminOfferPage() {
     },
     onSuccess: () => {
       setFeedback({ type: "ok", message: "Alterações salvas." });
+      setDirty(false);
       void queryClient.invalidateQueries({ queryKey: ["admin-offer-content"] });
       void queryClient.invalidateQueries({ queryKey: ["offer-content"] });
     },
@@ -148,10 +152,12 @@ function AdminOfferPage() {
 
   function setBlock(key: string, patch: Partial<OfferBlock>) {
     setFeedback(null);
+    setDirty(true);
     setBlocks((prev) => ({ ...(prev ?? {}), [key]: { ...(prev?.[key] ?? {}), ...patch } }));
   }
   function setData(key: string, patch: Record<string, unknown>) {
     setFeedback(null);
+    setDirty(true);
     setBlocks((prev) => ({
       ...(prev ?? {}),
       [key]: {
@@ -188,7 +194,7 @@ function AdminOfferPage() {
   function GenericBlock({ blockKey }: { blockKey: string }) {
     const data = d(blockKey);
     return (
-      <AdminCard title={BLOCK_LABELS[blockKey] ?? blockKey}>
+      <AdminCard title={BLOCK_LABELS[blockKey] ?? blockKey} collapsible>
         <TextField
           label="Título"
           rows={2}
@@ -256,12 +262,14 @@ function AdminOfferPage() {
           save.mutate(blocks);
         }}
       >
-        <div className="flex flex-wrap gap-2">
+        <StickySaveBar pending={save.isPending} feedback={feedback} dirty={dirty}>
           <PreviewLink to="/admin/preview" label="PRÉ-VISUALIZAR OFERTA" />
-        </div>
+        </StickySaveBar>
 
         {/* Configuração da oferta */}
         <AdminCard
+          collapsible
+          defaultOpen
           title="Configuração da oferta"
           description="Dados usados por todos os botões de compra da página."
         >
@@ -362,7 +370,7 @@ function AdminOfferPage() {
         </AdminCard>
 
         {/* Fases */}
-        <AdminCard title="As 4 fases da formação">
+        <AdminCard title="As 4 fases da formação" collapsible>
           <TextField
             label="Título da seção"
             value={b("phases").title ?? ""}
@@ -414,7 +422,7 @@ function AdminOfferPage() {
         </AdminCard>
 
         {/* Bônus */}
-        <AdminCard title="Presentes especiais (bônus)">
+        <AdminCard title="Presentes especiais (bônus)" collapsible>
           <FieldGrid>
             <TextField
               label="Título da seção"
@@ -488,7 +496,7 @@ function AdminOfferPage() {
         </AdminCard>
 
         {/* FAQ */}
-        <AdminCard title="Perguntas frequentes da formação">
+        <AdminCard title="Perguntas frequentes da formação" collapsible>
           <TextField
             label="Título da seção"
             value={b("faq").title ?? ""}

@@ -30,6 +30,7 @@ import {
   Loader2,
   Plus,
   Trash2,
+  ChevronDown,
   TriangleAlert,
 } from "lucide-react";
 
@@ -43,30 +44,62 @@ export function AdminCard({
   actions,
   children,
   className,
+  collapsible = false,
+  defaultOpen = false,
 }: {
   title: string;
   description?: string;
   actions?: ReactNode;
   children: ReactNode;
   className?: string;
+  /** Quando verdadeiro, o bloco abre e fecha ao clicar no cabeçalho. */
+  collapsible?: boolean;
+  defaultOpen?: boolean;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const isOpen = collapsible ? open : true;
+
   return (
     <section
       className={cn("rounded-lg border border-border/60 bg-card/40 p-5 sm:p-6", className)}
     >
-      <header className="mb-5 flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="font-display text-lg text-foreground">{title}</h2>
-          {description ? (
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-          ) : null}
-        </div>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        {collapsible ? (
+          <button
+            type="button"
+            aria-expanded={isOpen}
+            onClick={() => setOpen((v) => !v)}
+            className="flex min-w-0 flex-1 items-start gap-3 text-left"
+          >
+            <ChevronDown
+              className={cn(
+                "mt-1 size-4 shrink-0 text-primary transition-transform",
+                isOpen ? "rotate-0" : "-rotate-90",
+              )}
+              aria-hidden
+            />
+            <span className="min-w-0">
+              <span className="block font-display text-lg text-foreground">{title}</span>
+              {description ? (
+                <span className="mt-1 block text-sm text-muted-foreground">{description}</span>
+              ) : null}
+            </span>
+          </button>
+        ) : (
+          <div className="min-w-0">
+            <h2 className="font-display text-lg text-foreground">{title}</h2>
+            {description ? (
+              <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+            ) : null}
+          </div>
+        )}
         {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
       </header>
-      <div className="space-y-5">{children}</div>
+      <div className={cn("mt-5 space-y-5", isOpen ? "" : "hidden")}>{children}</div>
     </section>
   );
 }
+
 
 export function FieldGrid({ children, className }: { children: ReactNode; className?: string }) {
   return <div className={cn("grid gap-5 sm:grid-cols-2", className)}>{children}</div>;
@@ -197,6 +230,48 @@ export function SaveBar({
       <FeedbackLine feedback={feedback ?? null} />
     </div>
   );
+}
+
+/**
+ * Barra fixa no topo do formulário: salvar sem precisar rolar até o fim,
+ * com aviso de alterações pendentes e retorno de sucesso/erro.
+ */
+export function StickySaveBar({
+  pending,
+  feedback,
+  dirty,
+  label = "SALVAR ALTERAÇÕES",
+  children,
+}: {
+  pending?: boolean;
+  feedback?: Feedback;
+  dirty?: boolean;
+  label?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="sticky top-0 z-30 -mx-4 mb-2 border-b border-border/60 bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit" disabled={pending}>
+          {pending ? (
+            <>
+              <Loader2 className="size-4 animate-spin" /> Salvando…
+            </>
+          ) : (
+            label
+          )}
+        </Button>
+        {children}
+        {dirty && !feedback ? (
+          <span className="text-xs uppercase tracking-[0.16em] text-primary">
+            Alterações não salvas
+          </span>
+        ) : null}
+        <FeedbackLine feedback={feedback ?? null} />
+      </div>
+    </div>
+  );
+
 }
 
 /* -------------------------------------------------------------------------- */

@@ -199,7 +199,7 @@ export function LeadForm({
       </Button>
 
       {microcopy ? (
-        <p className="text-xs leading-relaxed text-muted-foreground">{microcopy}</p>
+        <p className="whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{microcopy}</p>
       ) : null}
     </form>
   );
