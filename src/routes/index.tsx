@@ -188,9 +188,10 @@ function CapturePage() {
                   key={paragraph}
                   className={
                     index >= 4
-                      ? "font-display text-xl leading-relaxed text-foreground sm:text-2xl"
-                      : "text-lede"
+                      ? "whitespace-pre-line font-display text-xl leading-relaxed text-foreground sm:text-2xl"
+                      : "whitespace-pre-line text-lede"
                   }
+
                 >
                   {paragraph}
                 </p>
@@ -254,7 +255,7 @@ function CapturePage() {
             {field<string[]>("audience", "items", []).map((item, index) => (
               <Reveal as="li" key={item} delay={index * 40} className="flex gap-4">
                 <Eye className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
-                <span className="text-base leading-relaxed text-foreground/90">{item}</span>
+                <span className="whitespace-pre-line text-base leading-relaxed text-foreground/90">{item}</span>
               </Reveal>
             ))}
           </ul>
@@ -268,7 +269,7 @@ function CapturePage() {
             <h2 className="text-heading text-muted-foreground">{block("not_audience").title}</h2>
             <ul className="mt-6 space-y-3">
               {field<string[]>("not_audience", "items", []).map((item) => (
-                <li key={item} className="flex gap-4 text-base text-muted-foreground">
+                <li key={item} className="flex gap-4 whitespace-pre-line text-base text-muted-foreground">
                   <Minus className="mt-2 size-3 shrink-0 text-muted-foreground/60" aria-hidden />
                   {item}
                 </li>
