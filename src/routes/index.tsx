@@ -252,7 +252,7 @@ function CapturePage() {
                       <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                         {item.steps.map((step, stepIndex) => (
                           <div key={step} className="flex items-center gap-3">
-                            <span className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/5 px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground">
+                            <span className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-background/85 px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground shadow-sm backdrop-blur-sm">
                               <span className="text-primary">{stepIndex + 1}</span>
                               {step}
                             </span>
