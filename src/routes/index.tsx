@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useCaptureContent } from "@/lib/capture-content";
 import { useMediaUrl } from "@/lib/media";
+import { SeoFromSettings } from "@/lib/seo";
+
 
 
 const title = "OLHE DIFERENTE — Aula gratuita de Iridologia com o Prof. Marcos Dias";
@@ -127,7 +129,9 @@ function CapturePage() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden">
+      <SeoFromSettings />
       <IrisGlow />
+
 
       {/* Cabeçalho: apenas a marca. Nenhum acesso administrativo é exposto ao visitante. */}
       <Container width="wide" className="relative flex items-center justify-between py-6">
@@ -456,7 +460,8 @@ function CapturePage() {
       <footer className="border-t border-border/60 py-10">
         <Container width="wide" className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-display text-sm uppercase tracking-[0.3em] text-primary">
-            Olhe Diferente
+            {site.projectName}
+
           </span>
           <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
             {site.footerText || `Professor ${site.teacherName}`}
