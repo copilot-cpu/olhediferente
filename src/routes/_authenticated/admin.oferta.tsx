@@ -81,6 +81,8 @@ function AdminOfferPage() {
   const queryClient = useQueryClient();
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [blocks, setBlocks] = useState<Blocks | null>(null);
+  const [dirty, setDirty] = useState(false);
+
 
   const rowsQuery = useQuery({
     queryKey: ["admin-offer-content"],
