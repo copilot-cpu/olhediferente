@@ -217,7 +217,7 @@ function CapturePage() {
 
       {/* O QUE VOCÊ VAI DESCOBRIR */}
       <Section className="relative overflow-hidden border-t border-border/50 bg-background">
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
           <img
             src={aprenderWatermark.url}
             alt=""
@@ -229,7 +229,7 @@ function CapturePage() {
           <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background to-transparent" />
         </div>
 
-        <Container width="default" className="relative">
+        <Container width="default" className="relative z-10">
           <Reveal>
             <p className="text-overline">O que você vai descobrir</p>
             <h2 className="text-title mt-3 text-foreground">{block("discover").title}</h2>
