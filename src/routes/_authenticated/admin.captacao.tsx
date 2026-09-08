@@ -11,6 +11,7 @@ import {
   PreviewLink,
   Repeater,
   SaveBar,
+  StickySaveBar,
   StringListEditor,
   TextField,
   type FaqItem,
@@ -69,6 +70,7 @@ function AdminCapturePage() {
   const queryClient = useQueryClient();
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [blocks, setBlocks] = useState<Blocks | null>(null);
+  const [dirty, setDirty] = useState(false);
 
   const rowsQuery = useQuery({
     queryKey: ["admin-capture-content"],
@@ -103,6 +105,7 @@ function AdminCapturePage() {
     },
     onSuccess: () => {
       setFeedback({ type: "ok", message: "Alterações salvas." });
+      setDirty(false);
       void queryClient.invalidateQueries({ queryKey: ["admin-capture-content"] });
       void queryClient.invalidateQueries({ queryKey: ["capture-page-content"] });
     },
@@ -133,10 +136,12 @@ function AdminCapturePage() {
 
   function setBlock(key: string, patch: Partial<CaptureBlock>) {
     setFeedback(null);
+    setDirty(true);
     setBlocks((prev) => ({ ...(prev ?? {}), [key]: { ...(prev?.[key] ?? {}), ...patch } }));
   }
   function setData(key: string, patch: Record<string, unknown>) {
     setFeedback(null);
+    setDirty(true);
     setBlocks((prev) => ({
       ...(prev ?? {}),
       [key]: { ...(prev?.[key] ?? {}), data: { ...((prev?.[key]?.data ?? {}) as object), ...patch } },
@@ -156,12 +161,12 @@ function AdminCapturePage() {
           save.mutate(blocks);
         }}
       >
-        <div className="flex flex-wrap gap-2">
+        <StickySaveBar pending={save.isPending} feedback={feedback} dirty={dirty}>
           <PreviewLink to="/" label="VER PÁGINA DE CAPTAÇÃO" />
-        </div>
+        </StickySaveBar>
 
         {/* HERO */}
-        <AdminCard title="Hero" description="Primeira dobra da página.">
+        <AdminCard title="Hero" description="Primeira dobra da página." collapsible defaultOpen>
           <FieldGrid>
             <TextField
               label="Eyebrow (linha acima do título)"
@@ -205,8 +210,8 @@ function AdminCapturePage() {
             />
           </FieldGrid>
           <ImageField
-            label="Imagem principal (íris)"
-            hint="Imagem macro exibida ao lado da headline."
+            label="Imagem de fundo do topo (alternativa ao vídeo)"
+            hint="O topo exibe um vídeo em loop. Esta imagem aparece enquanto o vídeo carrega e para quem prefere menos animação."
             folder="captacao"
             value={b("hero").media_url ?? ""}
             onChange={(v) => setBlock("hero", { media_url: v })}
@@ -214,7 +219,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* FORMULÁRIO */}
-        <AdminCard title="Formulário de inscrição" description="Textos ao redor do formulário.">
+        <AdminCard title="Formulário de inscrição" description="Textos ao redor do formulário." collapsible>
           <TextField
             label="Título do formulário"
             value={b("form").title ?? ""}
@@ -234,7 +239,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* GRANDE PERGUNTA */}
-        <AdminCard title="A grande pergunta">
+        <AdminCard title="A grande pergunta" collapsible>
           <TextField
             label="Headline"
             rows={2}
@@ -251,7 +256,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* DESCOBRIR */}
-        <AdminCard title="O que você vai descobrir">
+        <AdminCard title="O que você vai descobrir" collapsible>
           <TextField
             label="Título da seção"
             value={b("discover").title ?? ""}
@@ -297,7 +302,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* PARA QUEM É */}
-        <AdminCard title="Para quem é">
+        <AdminCard title="Para quem é" collapsible>
           <TextField
             label="Título da seção"
             rows={2}
@@ -313,7 +318,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* PARA QUEM NÃO É */}
-        <AdminCard title="Para quem não é">
+        <AdminCard title="Para quem não é" collapsible>
           <TextField
             label="Título da seção"
             rows={2}
@@ -334,7 +339,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* PROFESSOR */}
-        <AdminCard title="Professor">
+        <AdminCard title="Professor" collapsible>
           <FieldGrid>
             <TextField
               label="Título da seção"
@@ -386,7 +391,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* MANIFESTO */}
-        <AdminCard title="Manifesto">
+        <AdminCard title="Manifesto" collapsible>
           <TextField
             label="Título"
             value={b("manifesto").title ?? ""}
@@ -408,7 +413,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* SEGUNDA CAPTURA */}
-        <AdminCard title="Segunda chamada de inscrição">
+        <AdminCard title="Segunda chamada de inscrição" collapsible>
           <TextField
             label="Título"
             value={b("second_capture").title ?? ""}
@@ -428,7 +433,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* FAQ */}
-        <AdminCard title="Perguntas frequentes">
+        <AdminCard title="Perguntas frequentes" collapsible>
           <TextField
             label="Título da seção"
             value={b("faq").title ?? ""}
@@ -441,7 +446,7 @@ function AdminCapturePage() {
         </AdminCard>
 
         {/* CTA FINAL */}
-        <AdminCard title="Chamada final">
+        <AdminCard title="Chamada final" collapsible>
           <TextField
             label="Título"
             rows={2}
