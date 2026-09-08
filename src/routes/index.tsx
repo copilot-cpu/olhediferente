@@ -5,6 +5,7 @@ import { Container, GoldRule, Section } from "@/components/ds/container";
 import { IrisGlow } from "@/components/ds/iris";
 import heroVideo from "@/assets/hero-eye.mp4.asset.json";
 import heroPoster from "@/assets/hero-eye-poster.jpg.asset.json";
+import manifestoVisual from "@/assets/manifesto-olhe-diferente.png.asset.json";
 import { Reveal } from "@/components/ds/reveal";
 import { LeadForm } from "@/components/capture/lead-form";
 import {
@@ -360,25 +361,33 @@ function CapturePage() {
 
       {/* MANIFESTO */}
       <Section className="relative overflow-hidden border-t border-primary/20 bg-surface-deep">
-        <div
-          aria-hidden
-          className="iris-field pointer-events-none absolute -right-40 top-1/2 size-[40rem] -translate-y-1/2 opacity-[0.12] blur-2xl"
-        />
         <Container width="default" className="relative">
-          <Reveal>
-            <h2 className="text-display text-primary">{block("manifesto").title}</h2>
-            <GoldRule className="my-10 max-w-sm" />
-            <div className="max-w-2xl space-y-6">
-              {field<string[]>("manifesto", "paragraphs", []).map((paragraph) => (
-                <p key={paragraph} className="whitespace-pre-line text-lede">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-            <p className="whitespace-pre-line mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
-              {block("manifesto").body}
-            </p>
-          </Reveal>
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:gap-8">
+            <Reveal className="relative z-10">
+              <h2 className="text-display text-primary">{block("manifesto").title}</h2>
+              <GoldRule className="my-10 max-w-sm" />
+              <div className="max-w-2xl space-y-6">
+                {field<string[]>("manifesto", "paragraphs", []).map((paragraph) => (
+                  <p key={paragraph} className="whitespace-pre-line text-lede">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+              <p className="whitespace-pre-line mt-14 max-w-3xl font-display text-3xl leading-tight text-foreground sm:text-5xl">
+                {block("manifesto").body}
+              </p>
+            </Reveal>
+
+            <Reveal delay={100} className="manifesto-visual-mask relative hidden lg:block">
+              <img
+                src={manifestoVisual.url}
+                alt="Íris integrada ao perfil humano, representando uma visão ampla e integrativa"
+                className="aspect-square h-auto w-full object-contain opacity-80 mix-blend-lighten"
+                loading="lazy"
+                decoding="async"
+              />
+            </Reveal>
+          </div>
         </Container>
       </Section>
 

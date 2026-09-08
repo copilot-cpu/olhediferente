@@ -232,3 +232,9 @@
     transparent
   );
 }
+
+/* Integra imagens escuras à superfície verde sem criar uma caixa preta visível. */
+@utility manifesto-visual-mask {
+  mask-image: radial-gradient(circle at center, black 48%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle at center, black 48%, transparent 78%);
+}
