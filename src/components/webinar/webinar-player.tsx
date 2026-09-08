@@ -52,9 +52,11 @@ export function WebinarPlayer({
   return (
     <div
       className={cn(
-        "relative mx-auto w-full max-w-5xl overflow-hidden rounded-xl border border-primary/15 bg-[oklch(0.16_0.02_150)]",
+        "relative mx-auto w-full overflow-hidden rounded-xl border border-primary/15 bg-[oklch(0.16_0.02_150)]",
         "shadow-[0_30px_80px_-40px_oklch(0.76_0.115_82_/_0.35)]",
-        "max-h-[62vh] sm:max-h-[68vh]",
+        // Largura limitada também pela altura disponível, para o vídeo
+        // caber inteiro na tela sem nunca ser cortado.
+        "max-w-[min(56rem,calc((100svh-18rem)*16/9))]",
         className,
       )}
     >
