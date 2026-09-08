@@ -411,12 +411,13 @@ function CapturePage() {
           <img
             src={signupIris.url}
             alt=""
-            className="h-full w-full object-cover object-center opacity-35"
+            className="h-full w-full object-cover object-center opacity-60"
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-background/75" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/85" />
+          <div className="absolute inset-0 bg-background/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/45 to-background/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background/70" />
         </div>
         <Container width="default" className="relative">
           <div className="grid min-w-0 items-start gap-12 lg:grid-cols-2">
