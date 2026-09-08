@@ -103,29 +103,9 @@ function WebinarPage() {
             onAdapterReady={setAdapter}
           />
 
-          <dl className="mt-4 grid gap-3 rounded-lg border border-border/60 bg-card/40 px-5 py-4 sm:grid-cols-3">
-            <div>
-              <dt className="text-overline">Status</dt>
-              <dd className="mt-1 text-sm text-foreground">{settings.broadcastLabel}</dd>
-            </div>
-            <div>
-              <dt className="text-overline">Professor</dt>
-              <dd className="mt-1 text-sm text-foreground">{settings.teacherName}</dd>
-            </div>
-            <div>
-              <dt className="text-overline">Formato</dt>
-              <dd className="mt-1 text-sm text-foreground">{settings.lessonSubtitle}</dd>
-            </div>
-          </dl>
-
-          <div className="mt-5 space-y-1 text-center">
-            <p className="text-sm text-foreground/90">
-              Reserve este momento para acompanhar a aula com atenção.
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Durante a apresentação, algumas informações poderão aparecer abaixo do vídeo.
-            </p>
-          </div>
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            Durante a apresentação, algumas informações poderão aparecer abaixo do vídeo.
+          </p>
 
           <OfferRevealRegion offerUnlocked={offerUnlocked} />
         </div>
