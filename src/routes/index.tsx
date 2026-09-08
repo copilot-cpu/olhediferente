@@ -216,8 +216,21 @@ function CapturePage() {
       </Section>
 
       {/* O QUE VOCÊ VAI DESCOBRIR */}
-      <Section className="relative border-t border-border/50 bg-background">
-        <Container width="default">
+      <Section className="relative overflow-hidden border-t border-border/50 bg-background">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <img
+            src={aprenderWatermark.url}
+            alt=""
+            className="absolute top-1/2 left-1/2 h-[125%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.10] sm:opacity-[0.16] mix-blend-lighten"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
+          <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background to-transparent" />
+        </div>
+
+        <Container width="default" className="relative">
           <Reveal>
             <p className="text-overline">O que você vai descobrir</p>
             <h2 className="text-title mt-3 text-foreground">{block("discover").title}</h2>
