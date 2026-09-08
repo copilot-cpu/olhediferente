@@ -73,7 +73,8 @@ function DateStamp({ date, time }: { date: string; time?: string }) {
   );
 }
 
-function HeroBackdrop() {
+function HeroBackdrop({ fallbackImage }: { fallbackImage?: string | null }) {
+  const poster = fallbackImage || heroPoster.url;
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       {/* O vídeo cobre toda a dobra, com o olho centralizado. */}
@@ -81,7 +82,7 @@ function HeroBackdrop() {
         <video
           className="h-full w-full object-cover object-center opacity-95 motion-reduce:hidden"
           src={heroVideo.url}
-          poster={heroPoster.url}
+          poster={poster}
           autoPlay
           muted
           loop
@@ -91,11 +92,12 @@ function HeroBackdrop() {
           tabIndex={-1}
         />
         <img
-          src={heroPoster.url}
+          src={poster}
           alt=""
           className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-95 motion-reduce:block"
         />
       </div>
+
       {/* Véus laterais: escurecem só o suficiente atrás do texto e do formulário. */}
       <div className="absolute inset-0 bg-[linear-gradient(100deg,var(--background)_0%,color-mix(in_oklab,var(--background)_78%,transparent)_22%,color-mix(in_oklab,var(--background)_20%,transparent)_46%,color-mix(in_oklab,var(--background)_20%,transparent)_58%,color-mix(in_oklab,var(--background)_82%,transparent)_82%,var(--background)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_45%,transparent_35%,color-mix(in_oklab,var(--background)_55%,transparent)_100%)]" />
