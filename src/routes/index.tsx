@@ -221,12 +221,11 @@ function CapturePage() {
           <img
             src={aprenderWatermark.url}
             alt=""
-            className="absolute top-1/2 left-1/2 h-[125%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.10] sm:opacity-[0.16] mix-blend-lighten"
+            className="absolute top-1/2 right-[-4%] h-[115%] w-auto max-w-none -translate-y-1/2 object-contain object-right opacity-[0.18] sm:right-0 sm:h-[120%] sm:opacity-[0.26]"
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
-          <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background to-transparent" />
+          <div className="absolute inset-y-0 left-0 w-3/5 bg-gradient-to-r from-background via-background/80 to-transparent" />
           <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background to-transparent" />
         </div>
 
