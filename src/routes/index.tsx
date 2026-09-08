@@ -7,6 +7,7 @@ import heroVideo from "@/assets/hero-eye.mp4.asset.json";
 import heroPoster from "@/assets/hero-eye-poster.jpg.asset.json";
 import manifestoVisual from "@/assets/manifesto-olhe-diferente.png.asset.json";
 import signupIris from "@/assets/iris-inscricao.png.asset.json";
+import aprenderWatermark from "@/assets/aprender-watermark.png.asset.json";
 import { Reveal } from "@/components/ds/reveal";
 import { LeadForm } from "@/components/capture/lead-form";
 import {
@@ -215,8 +216,20 @@ function CapturePage() {
       </Section>
 
       {/* O QUE VOCÊ VAI DESCOBRIR */}
-      <Section className="relative border-t border-border/50 bg-background">
-        <Container width="default">
+      <Section className="relative overflow-hidden border-t border-border/50 bg-background">
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+          <img
+            src={aprenderWatermark.url}
+            alt=""
+            className="absolute top-1/2 right-[-4%] h-[115%] w-auto max-w-none -translate-y-1/2 object-contain object-right opacity-[0.18] sm:right-0 sm:h-[120%] sm:opacity-[0.26]"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-y-0 left-0 w-3/5 bg-gradient-to-r from-background via-background/80 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background to-transparent" />
+        </div>
+
+        <Container width="default" className="relative z-10">
           <Reveal>
             <p className="text-overline">O que você vai descobrir</p>
             <h2 className="text-title mt-3 text-foreground">{block("discover").title}</h2>
