@@ -7,6 +7,7 @@ import heroVideo from "@/assets/hero-eye.mp4.asset.json";
 import heroPoster from "@/assets/hero-eye-poster.jpg.asset.json";
 import manifestoVisual from "@/assets/manifesto-olhe-diferente.png.asset.json";
 import signupIris from "@/assets/iris-inscricao.png.asset.json";
+import aprenderWatermark from "@/assets/aprender-watermark.png.asset.json";
 import { Reveal } from "@/components/ds/reveal";
 import { LeadForm } from "@/components/capture/lead-form";
 import {
