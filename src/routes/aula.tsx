@@ -78,19 +78,15 @@ function WebinarPage() {
       <Container width="wide" className="relative pb-16 pt-8 sm:pt-10">
         <div className="mx-auto max-w-[1160px]">
           <div className="text-center">
-            <p className="font-sans text-[0.62rem] uppercase tracking-[0.28em] text-primary sm:text-[0.68rem]">
-              Sua inscrição está confirmada
-            </p>
-            <h1 className="mt-3 font-display text-2xl leading-tight text-foreground sm:text-3xl">
-              Sua vaga para a aula{" "}
-              <span className="text-primary">{settings.lessonTitle}</span> está confirmada.
+            <h1 className="font-display text-lg leading-snug text-foreground sm:text-xl">
+              {settings.lessonTitle}
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Agora é só dar o play e aproveitar.
+            <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">
+              com o Professor {settings.teacherName} · {settings.lessonSubtitle}
             </p>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
             <BroadcastStatus label={settings.broadcastLabel} />
             <BroadcastActivity
               enabled={settings.viewerCounterEnabled}
@@ -98,42 +94,18 @@ function WebinarPage() {
               label={settings.viewerLabel}
               viewerSource="simulation"
             />
-            <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              {settings.lessonTitle} · com o Professor {settings.teacherName} ·{" "}
-              {settings.lessonSubtitle}
-            </p>
           </div>
 
           <WebinarPlayer
-            className="mt-6 sm:mt-8"
+            className="mt-5"
             embedUrl={playerUrl}
             title={`${settings.lessonTitle} — aula online`}
             onAdapterReady={setAdapter}
           />
 
-          <dl className="mt-4 grid gap-3 rounded-lg border border-border/60 bg-card/40 px-5 py-4 sm:grid-cols-3">
-            <div>
-              <dt className="text-overline">Status</dt>
-              <dd className="mt-1 text-sm text-foreground">{settings.broadcastLabel}</dd>
-            </div>
-            <div>
-              <dt className="text-overline">Professor</dt>
-              <dd className="mt-1 text-sm text-foreground">{settings.teacherName}</dd>
-            </div>
-            <div>
-              <dt className="text-overline">Formato</dt>
-              <dd className="mt-1 text-sm text-foreground">{settings.lessonSubtitle}</dd>
-            </div>
-          </dl>
-
-          <div className="mt-5 space-y-1 text-center">
-            <p className="text-sm text-foreground/90">
-              Reserve este momento para acompanhar a aula com atenção.
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Durante a apresentação, algumas informações poderão aparecer abaixo do vídeo.
-            </p>
-          </div>
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            Durante a apresentação, algumas informações poderão aparecer abaixo do vídeo.
+          </p>
 
           <OfferRevealRegion offerUnlocked={offerUnlocked} />
         </div>
