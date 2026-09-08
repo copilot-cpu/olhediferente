@@ -232,6 +232,48 @@ export function SaveBar({
   );
 }
 
+/**
+ * Barra fixa no topo do formulário: salvar sem precisar rolar até o fim,
+ * com aviso de alterações pendentes e retorno de sucesso/erro.
+ */
+export function StickySaveBar({
+  pending,
+  feedback,
+  dirty,
+  label = "SALVAR ALTERAÇÕES",
+  children,
+}: {
+  pending?: boolean;
+  feedback?: Feedback;
+  dirty?: boolean;
+  label?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="sticky top-0 z-30 -mx-4 mb-2 border-b border-border/60 bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit" disabled={pending}>
+          {pending ? (
+            <>
+              <Loader2 className="size-4 animate-spin" /> Salvando…
+            </>
+          ) : (
+            label
+          )}
+        </Button>
+        {children}
+        {dirty && !feedback ? (
+          <span className="text-xs uppercase tracking-[0.16em] text-primary">
+            Alterações não salvas
+          </span>
+        ) : null}
+        <FeedbackLine feedback={feedback ?? null} />
+      </div>
+    </div>
+  );
+
+}
+
 /* -------------------------------------------------------------------------- */
 /* Confirmação de exclusão                                                     */
 /* -------------------------------------------------------------------------- */
