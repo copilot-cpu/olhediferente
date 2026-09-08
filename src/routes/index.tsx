@@ -16,6 +16,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useCaptureContent } from "@/lib/capture-content";
+import { useMediaUrl } from "@/lib/media";
+
 
 const title = "OLHE DIFERENTE — Aula gratuita de Iridologia com o Prof. Marcos Dias";
 const description =
@@ -119,6 +121,9 @@ function CapturePage() {
   const dateLabel = field("hero", "date_label", "[DATA DA AULA]");
   const timeLabel = field("hero", "time_label", "[HORÁRIO]");
   const microcopy = form.body ?? "";
+  const heroFallback = useMediaUrl(hero.media_url);
+  const teacherPhoto = useMediaUrl(block("teacher").media_url);
+
 
   return (
     <main className="relative min-h-screen overflow-x-hidden">
@@ -139,7 +144,7 @@ function CapturePage() {
         id="inscricao"
         className="relative isolate flex items-center overflow-hidden pt-4 pb-12 sm:pt-6 lg:min-h-[calc(100svh-5.5rem)] lg:pt-6 lg:pb-10"
       >
-        <HeroBackdrop />
+        <HeroBackdrop fallbackImage={heroFallback} />
         <Container width="wide" className="w-full">
           <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
             <Reveal className="min-w-0 max-w-xl">
@@ -298,9 +303,10 @@ function CapturePage() {
               <h2 className="text-title mt-3 text-foreground">{block("teacher").subtitle}</h2>
 
               <div className="mt-8 overflow-hidden rounded-sm border border-border/60 bg-card/40">
-                {block("teacher").media_url ? (
+                {teacherPhoto ? (
                   <img
-                    src={block("teacher").media_url}
+                    src={teacherPhoto}
+
                     alt="Professor Marcos Dias"
                     loading="lazy"
                     className="aspect-[4/5] w-full object-cover"
