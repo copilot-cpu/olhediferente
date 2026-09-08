@@ -6,6 +6,7 @@ import { IrisGlow } from "@/components/ds/iris";
 import heroVideo from "@/assets/hero-eye.mp4.asset.json";
 import heroPoster from "@/assets/hero-eye-poster.jpg.asset.json";
 import manifestoVisual from "@/assets/manifesto-olhe-diferente.png.asset.json";
+import signupIris from "@/assets/iris-inscricao.png.asset.json";
 import { Reveal } from "@/components/ds/reveal";
 import { LeadForm } from "@/components/capture/lead-form";
 import {
@@ -392,8 +393,19 @@ function CapturePage() {
       </Section>
 
       {/* SEGUNDA CAPTURA */}
-      <Section id="inscricao-final" className="relative border-t border-border/50 bg-background">
-        <Container width="default">
+      <Section id="inscricao-final" className="relative overflow-hidden border-t border-border/50 bg-background">
+        <div aria-hidden className="absolute inset-0">
+          <img
+            src={signupIris.url}
+            alt=""
+            className="h-full w-full object-cover object-center opacity-35"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-background/75" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/85" />
+        </div>
+        <Container width="default" className="relative">
           <div className="grid min-w-0 items-start gap-12 lg:grid-cols-2">
             <Reveal>
               <h2 className="text-title text-foreground">{block("second_capture").title}</h2>
