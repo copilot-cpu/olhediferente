@@ -89,7 +89,7 @@ export const createAdminUser = createServerFn({ method: "POST" })
         password: data.password,
         email_confirm: true,
       });
-      if (updateError) throw new Error(updateError.message);
+      if (updateError) throw new Error(authErrorMessage(updateError.message));
       userId = existing.id;
     }
 
