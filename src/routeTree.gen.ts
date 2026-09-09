@@ -21,6 +21,7 @@ import { Route as AuthenticatedAdminLeadsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminOfertaRouteImport } from './routes/_authenticated/admin.oferta'
 import { Route as AuthenticatedAdminPreviewRouteImport } from './routes/_authenticated/admin.preview'
 import { Route as AuthenticatedAdminSimulacaoRouteImport } from './routes/_authenticated/admin.simulacao'
+import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
 import { Route as AuthenticatedAdminWebinarRouteImport } from './routes/_authenticated/admin.webinar'
 
 const IndexRoute = IndexRouteImport.update({
@@ -87,6 +88,12 @@ const AuthenticatedAdminSimulacaoRoute =
     path: '/simulacao',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminUsuariosRoute =
+  AuthenticatedAdminUsuariosRouteImport.update({
+    id: '/usuarios',
+    path: '/usuarios',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminWebinarRoute =
   AuthenticatedAdminWebinarRouteImport.update({
     id: '/webinar',
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/admin/oferta': typeof AuthenticatedAdminOfertaRoute
   '/admin/preview': typeof AuthenticatedAdminPreviewRoute
   '/admin/simulacao': typeof AuthenticatedAdminSimulacaoRoute
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/admin/webinar': typeof AuthenticatedAdminWebinarRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -118,6 +126,7 @@ export interface FileRoutesByTo {
   '/admin/oferta': typeof AuthenticatedAdminOfertaRoute
   '/admin/preview': typeof AuthenticatedAdminPreviewRoute
   '/admin/simulacao': typeof AuthenticatedAdminSimulacaoRoute
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/admin/webinar': typeof AuthenticatedAdminWebinarRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -134,6 +143,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/oferta': typeof AuthenticatedAdminOfertaRoute
   '/_authenticated/admin/preview': typeof AuthenticatedAdminPreviewRoute
   '/_authenticated/admin/simulacao': typeof AuthenticatedAdminSimulacaoRoute
+  '/_authenticated/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/_authenticated/admin/webinar': typeof AuthenticatedAdminWebinarRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/admin/oferta'
     | '/admin/preview'
     | '/admin/simulacao'
+    | '/admin/usuarios'
     | '/admin/webinar'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/admin/oferta'
     | '/admin/preview'
     | '/admin/simulacao'
+    | '/admin/usuarios'
     | '/admin/webinar'
     | '/admin'
   id:
@@ -178,6 +190,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/oferta'
     | '/_authenticated/admin/preview'
     | '/_authenticated/admin/simulacao'
+    | '/_authenticated/admin/usuarios'
     | '/_authenticated/admin/webinar'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSimulacaoRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/usuarios': {
+      id: '/_authenticated/admin/usuarios'
+      path: '/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/webinar': {
       id: '/_authenticated/admin/webinar'
       path: '/webinar'
@@ -292,6 +312,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminOfertaRoute: typeof AuthenticatedAdminOfertaRoute
   AuthenticatedAdminPreviewRoute: typeof AuthenticatedAdminPreviewRoute
   AuthenticatedAdminSimulacaoRoute: typeof AuthenticatedAdminSimulacaoRoute
+  AuthenticatedAdminUsuariosRoute: typeof AuthenticatedAdminUsuariosRoute
   AuthenticatedAdminWebinarRoute: typeof AuthenticatedAdminWebinarRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -303,6 +324,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminOfertaRoute: AuthenticatedAdminOfertaRoute,
   AuthenticatedAdminPreviewRoute: AuthenticatedAdminPreviewRoute,
   AuthenticatedAdminSimulacaoRoute: AuthenticatedAdminSimulacaoRoute,
+  AuthenticatedAdminUsuariosRoute: AuthenticatedAdminUsuariosRoute,
   AuthenticatedAdminWebinarRoute: AuthenticatedAdminWebinarRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }

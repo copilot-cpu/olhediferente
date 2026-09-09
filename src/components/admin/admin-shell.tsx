@@ -25,6 +25,7 @@ const navItems = [
   { to: "/admin/oferta", label: "Oferta", icon: Gift, exact: false },
   { to: "/admin/simulacao", label: "Simulação", icon: FlaskConical, exact: false },
   { to: "/admin/leads", label: "Leads", icon: Users, exact: false },
+  { to: "/admin/usuarios", label: "Usuários", icon: UserCog, exact: false },
   { to: "/admin/configuracoes", label: "Configurações", icon: Settings, exact: false },
 ] as const;
 
