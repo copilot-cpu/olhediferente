@@ -75,7 +75,7 @@ export const createAdminUser = createServerFn({ method: "POST" })
 
     if (error && !userId) {
       const already = (error.message ?? "").toLowerCase().includes("already");
-      if (!already) throw new Error(error.message ?? "Não foi possível criar o acesso.");
+      if (!already) throw new Error(authErrorMessage(error.message));
 
       // Conta já existe: reaproveita, redefine a senha e garante a permissão.
       const { data: list, error: listError } = await supabaseAdmin.auth.admin.listUsers({
