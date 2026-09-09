@@ -7,6 +7,7 @@ import {
   Gift,
   FlaskConical,
   Users,
+  UserCog,
   Settings,
   LogOut,
   Menu,
