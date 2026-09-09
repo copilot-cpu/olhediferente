@@ -133,7 +133,8 @@ export const resetAdminPassword = createServerFn({ method: "POST" })
       password: data.password,
       email_confirm: true,
     });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(authErrorMessage(error.message));
+
     return { ok: true };
   });
 
