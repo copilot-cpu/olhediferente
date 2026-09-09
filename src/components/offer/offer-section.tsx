@@ -473,6 +473,7 @@ export function OfferSection() {
                 kind?: string;
                 title: string;
                 value?: string;
+                media_url?: string;
                 paragraphs?: string[];
                 items?: string[];
                 note?: string;
@@ -480,7 +481,7 @@ export function OfferSection() {
             >("bonuses", "featured", []).map((item, index) => (
               <Reveal key={item.number} delay={index * 70}>
                 <article className="grid gap-5 rounded-lg border border-forest-deep/15 bg-forest-deep/[0.03] p-6 sm:grid-cols-[auto_1fr] sm:p-8">
-                  <div className="flex items-start gap-3 sm:flex-col sm:gap-1">
+                  <div className="flex items-start gap-3 sm:w-32 sm:flex-col sm:gap-3">
                     <span className="font-display text-3xl leading-none text-primary sm:text-4xl">
                       {item.number}
                     </span>
@@ -489,8 +490,14 @@ export function OfferSection() {
                         {item.kind}
                       </span>
                     ) : null}
+                    <MediaImage
+                      value={item.media_url ?? ""}
+                      alt=""
+                      className="hidden w-full rounded-md border border-forest-deep/10 object-cover sm:block sm:aspect-[3/4]"
+                    />
                   </div>
                   <div className="min-w-0">
+
                     <h3 className="font-display text-xl leading-tight text-forest-deep sm:text-2xl">
                       {item.title}
                     </h3>
@@ -551,18 +558,11 @@ export function OfferSection() {
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <Reveal>
               <div className="mx-auto w-full max-w-xs overflow-hidden rounded-lg border border-cream/15 bg-forest-deep/40">
-                {field("teacher", "media_url", "") ? (
-                  <img
-                    src={field("teacher", "media_url", "")}
-                    alt={`Retrato do ${teacher.subtitle}`}
-                    loading="lazy"
-                    className="aspect-[4/5] w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex aspect-[4/5] items-center justify-center px-6 text-center text-xs text-cream/50">
-                    Espaço reservado para a fotografia do professor
-                  </div>
-                )}
+                <TeacherPhoto
+                  value={field("teacher", "media_url", "")}
+                  alt={`Retrato do ${teacher.subtitle}`}
+                />
+
               </div>
             </Reveal>
             <Reveal delay={80}>
