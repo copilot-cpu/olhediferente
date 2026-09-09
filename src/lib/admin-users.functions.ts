@@ -70,24 +70,41 @@ export const createAdminUser = createServerFn({ method: "POST" })
       password: data.password,
       email_confirm: true,
     });
-    if (error || !created.user) {
-      throw new Error(
-        error?.message?.toLowerCase().includes("already")
-          ? "Já existe uma conta com esse e-mail."
-          : (error?.message ?? "Não foi possível criar o acesso."),
-      );
+
+    let userId = created?.user?.id ?? null;
+
+    if (error && !userId) {
+      const already = (error.message ?? "").toLowerCase().includes("already");
+      if (!already) throw new Error(error.message ?? "Não foi possível criar o acesso.");
+
+      // Conta já existe: reaproveita, redefine a senha e garante a permissão.
+      const { data: list, error: listError } = await supabaseAdmin.auth.admin.listUsers({
+        perPage: 1000,
+      });
+      if (listError) throw new Error(listError.message);
+      const existing = list.users.find((u) => (u.email ?? "").toLowerCase() === data.email);
+      if (!existing) throw new Error("Já existe uma conta com esse e-mail.");
+
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(existing.id, {
+        password: data.password,
+        email_confirm: true,
+      });
+      if (updateError) throw new Error(updateError.message);
+      userId = existing.id;
     }
+
+    if (!userId) throw new Error("Não foi possível criar o acesso.");
 
     const { error: roleError } = await supabaseAdmin
       .from("admin_roles")
-      .insert({ user_id: created.user.id, role: "admin" });
-    if (roleError && !roleError.message.includes("duplicate")) {
-      await supabaseAdmin.auth.admin.deleteUser(created.user.id);
-      throw new Error("Conta criada, mas a permissão falhou. Tente novamente.");
+      .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+    if (roleError) {
+      throw new Error("Conta pronta, mas a permissão falhou. Tente novamente.");
     }
 
-    return { id: created.user.id, email: data.email };
+    return { id: userId, email: data.email };
   });
+
 
 export const resetAdminPassword = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
