@@ -555,6 +555,9 @@ function fieldLabel(key: string): string {
     brand: "Marca",
     brand_line: "Assinatura da marca",
     quote: "Frase",
+    background_url: "Imagem de fundo do bloco",
+    media_url: "Imagem ilustrativa do bloco",
+
   };
   return labels[key] ?? key.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
 }
