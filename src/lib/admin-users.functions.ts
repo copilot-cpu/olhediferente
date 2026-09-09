@@ -24,6 +24,17 @@ async function assertAdmin(context: {
   if (!data) throw new Error("Apenas administradores podem gerenciar acessos.");
 }
 
+function authErrorMessage(message?: string) {
+  const raw = (message ?? "").toLowerCase();
+  if (raw.includes("weak") || raw.includes("pwned") || raw.includes("easy to guess")) {
+    return "Essa senha é muito comum e foi recusada. Use o botão “Gerar senha” ou crie uma senha longa e única.";
+  }
+  if (raw.includes("password") && raw.includes("least")) {
+    return "A senha é curta demais. Use pelo menos 8 caracteres.";
+  }
+  return message || "Não foi possível concluir a ação.";
+}
+
 export const listAdminUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdminUser[]> => {
@@ -75,7 +86,7 @@ export const createAdminUser = createServerFn({ method: "POST" })
 
     if (error && !userId) {
       const already = (error.message ?? "").toLowerCase().includes("already");
-      if (!already) throw new Error(error.message ?? "Não foi possível criar o acesso.");
+      if (!already) throw new Error(authErrorMessage(error.message));
 
       // Conta já existe: reaproveita, redefine a senha e garante a permissão.
       const { data: list, error: listError } = await supabaseAdmin.auth.admin.listUsers({
@@ -89,7 +100,7 @@ export const createAdminUser = createServerFn({ method: "POST" })
         password: data.password,
         email_confirm: true,
       });
-      if (updateError) throw new Error(updateError.message);
+      if (updateError) throw new Error(authErrorMessage(updateError.message));
       userId = existing.id;
     }
 
@@ -122,7 +133,8 @@ export const resetAdminPassword = createServerFn({ method: "POST" })
       password: data.password,
       email_confirm: true,
     });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(authErrorMessage(error.message));
+
     return { ok: true };
   });
 
