@@ -112,7 +112,19 @@ function AdminUsersPage() {
               e.preventDefault();
               setFeedback(null);
               setCreated(null);
-              createMutation.mutate();
+              const cleanEmail = email.trim().toLowerCase();
+              if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+                setFeedback({ type: "error", message: "Informe um e-mail válido." });
+                return;
+              }
+              if (password.length < 8) {
+                setFeedback({
+                  type: "error",
+                  message: "A senha deve ter pelo menos 8 caracteres.",
+                });
+                return;
+              }
+              createMutation.mutate({ email: cleanEmail, password });
             }}
           >
             <FieldGrid>
