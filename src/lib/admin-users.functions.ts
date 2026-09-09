@@ -24,6 +24,17 @@ async function assertAdmin(context: {
   if (!data) throw new Error("Apenas administradores podem gerenciar acessos.");
 }
 
+function authErrorMessage(message?: string) {
+  const raw = (message ?? "").toLowerCase();
+  if (raw.includes("weak") || raw.includes("pwned") || raw.includes("easy to guess")) {
+    return "Essa senha é muito comum e foi recusada. Use o botão “Gerar senha” ou crie uma senha longa e única.";
+  }
+  if (raw.includes("password") && raw.includes("least")) {
+    return "A senha é curta demais. Use pelo menos 8 caracteres.";
+  }
+  return message || "Não foi possível concluir a ação.";
+}
+
 export const listAdminUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AdminUser[]> => {
