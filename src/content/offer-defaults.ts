@@ -45,6 +45,7 @@ export const offerDefaults: Record<string, OfferBlock> = {
     title: "O Olhar Clínico Integrativo",
     body: "Enquanto muitas formações se concentram em mapas, sinais e informações isoladas, esta jornada ensina o aluno a organizar tudo dentro de uma linha de raciocínio aplicável.",
     data: {
+      background_url: "",
       eyebrow: "O CORAÇÃO DA FORMAÇÃO",
       steps: [
         { number: "01", title: "OBSERVAR", body: "com precisão" },
@@ -84,6 +85,7 @@ export const offerDefaults: Record<string, OfferBlock> = {
     title:
       "Esta formação foi criada para quem quer transformar interesse em capacidade profissional.",
     data: {
+      media_url: "",
       items: [
         "Profissionais da saúde e do cuidado que querem ampliar repertório de atendimento.",
         "Terapeutas integrativos que já atendem, mas querem mais profundidade e estrutura.",
@@ -114,6 +116,7 @@ export const offerDefaults: Record<string, OfferBlock> = {
   phases: {
     title: "As 4 fases da formação",
     data: {
+      background_url: "",
       items: [
         {
           label: "FASE 1",
@@ -247,7 +250,7 @@ export const offerDefaults: Record<string, OfferBlock> = {
           body: "Para estruturar o fluxo inicial de consulta, registro e acompanhamento.",
         },
       ],
-      featured_title: "Bônus de maior destaque",
+      featured_title: "Presentes em destaque",
       featured: [
         {
           number: "07",

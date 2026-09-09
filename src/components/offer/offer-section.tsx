@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { OfferCta } from "@/components/offer/offer-cta";
 import { OfferStickyCta } from "@/components/offer/offer-sticky-cta";
+import { useMediaUrl } from "@/lib/media";
 import { useOfferContent } from "@/lib/offer-content";
 import { cn } from "@/lib/utils";
 
@@ -41,6 +42,62 @@ function Band({
 function Editorial({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={cn("mx-auto max-w-[68ch]", className)}>{children}</div>;
 }
+
+/** Imagem de fundo administrável de um bloco, sempre discreta atrás do texto. */
+function BlockBackdrop({ value, tone }: { value: string; tone: Band }) {
+  const url = useMediaUrl(value);
+  if (!url) return null;
+  const veil =
+    tone === "cream"
+      ? "from-cream via-cream/80 to-cream"
+      : tone === "olive"
+        ? "from-olive via-olive/80 to-olive"
+        : "from-forest-deep via-forest-deep/80 to-forest-deep";
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+      <img
+        src={url}
+        alt=""
+        loading="lazy"
+        className={cn(
+          "size-full object-cover",
+          tone === "cream" ? "opacity-20" : "opacity-30",
+        )}
+      />
+      <div className={cn("absolute inset-0 bg-gradient-to-r", veil)} />
+      <div className={cn("absolute inset-0 bg-gradient-to-t", veil)} />
+    </div>
+  );
+}
+
+/** Imagem administrável simples (some quando não há imagem cadastrada). */
+function MediaImage({
+  value,
+  alt,
+  className,
+}: {
+  value: string;
+  alt: string;
+  className?: string;
+}) {
+  const url = useMediaUrl(value);
+  if (!url) return null;
+  return <img src={url} alt={alt} loading="lazy" className={className} />;
+}
+
+/** Foto do professor, com espaço reservado enquanto não houver imagem. */
+function TeacherPhoto({ value, alt }: { value: string; alt: string }) {
+  const url = useMediaUrl(value);
+  if (!url) {
+    return (
+      <div className="flex aspect-[4/5] items-center justify-center px-6 text-center text-xs text-cream/50">
+        Espaço reservado para a fotografia do professor
+      </div>
+    );
+  }
+  return <img src={url} alt={alt} loading="lazy" className="aspect-[4/5] w-full object-cover" />;
+}
+
 
 export function OfferSection() {
   const { block, field, offer } = useOfferContent();
@@ -132,8 +189,10 @@ export function OfferSection() {
       </Band>
 
       {/* 03 — Mecanismo, progressão em eixo */}
-      <Band tone="deep">
-        <Container width="default">
+      <Band tone="deep" className="relative overflow-hidden">
+        <BlockBackdrop value={field("mechanism", "background_url", "")} tone="deep" />
+        <Container width="default" className="relative z-10">
+
           <Reveal>
             <Editorial>
               <p className="text-overline">{field("mechanism", "eyebrow", "")}</p>
@@ -203,21 +262,33 @@ export function OfferSection() {
       {/* 05 — Para quem é */}
       <Band tone="cream">
         <Container width="default">
-          <Reveal>
-            <h2 className="text-title mx-auto max-w-3xl text-forest-deep">{audience.title}</h2>
-          </Reveal>
-          <ul className="mx-auto mt-8 max-w-3xl divide-y divide-forest-deep/15 border-y border-forest-deep/15">
-            {field<string[]>("audience", "items", []).map((item, index) => (
-              <Reveal as="li" key={item} delay={index * 60} className="flex gap-4 py-4">
-                <span className="font-display text-sm text-forest-deep/40">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="text-base leading-relaxed text-forest-deep/85">{item}</span>
+          <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
+            <div>
+              <Reveal>
+                <h2 className="text-title max-w-3xl text-forest-deep">{audience.title}</h2>
               </Reveal>
-            ))}
-          </ul>
+              <ul className="mt-8 divide-y divide-forest-deep/15 border-y border-forest-deep/15">
+                {field<string[]>("audience", "items", []).map((item, index) => (
+                  <Reveal as="li" key={item} delay={index * 60} className="flex gap-4 py-4">
+                    <span className="font-display text-sm text-forest-deep/40">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-base leading-relaxed text-forest-deep/85">{item}</span>
+                  </Reveal>
+                ))}
+              </ul>
+            </div>
+            <Reveal delay={80} className="hidden lg:block">
+              <MediaImage
+                value={field("audience", "media_url", "")}
+                alt=""
+                className="aspect-[4/5] w-full rounded-lg object-cover"
+              />
+            </Reveal>
+          </div>
         </Container>
       </Band>
+
 
       {/* 06 — Estrutura */}
       <Band tone="deep">
@@ -255,8 +326,10 @@ export function OfferSection() {
       </Band>
 
       {/* 07 — As 4 fases */}
-      <Band tone="cream">
-        <Container width="default">
+      <Band tone="cream" className="relative overflow-hidden">
+        <BlockBackdrop value={field("phases", "background_url", "")} tone="cream" />
+        <Container width="default" className="relative z-10">
+
           <Reveal>
             <h2 className="text-title max-w-2xl text-forest-deep">{phases.title}</h2>
           </Reveal>
@@ -400,6 +473,7 @@ export function OfferSection() {
                 kind?: string;
                 title: string;
                 value?: string;
+                media_url?: string;
                 paragraphs?: string[];
                 items?: string[];
                 note?: string;
@@ -407,7 +481,7 @@ export function OfferSection() {
             >("bonuses", "featured", []).map((item, index) => (
               <Reveal key={item.number} delay={index * 70}>
                 <article className="grid gap-5 rounded-lg border border-forest-deep/15 bg-forest-deep/[0.03] p-6 sm:grid-cols-[auto_1fr] sm:p-8">
-                  <div className="flex items-start gap-3 sm:flex-col sm:gap-1">
+                  <div className="flex items-start gap-3 sm:w-32 sm:flex-col sm:gap-3">
                     <span className="font-display text-3xl leading-none text-primary sm:text-4xl">
                       {item.number}
                     </span>
@@ -416,8 +490,14 @@ export function OfferSection() {
                         {item.kind}
                       </span>
                     ) : null}
+                    <MediaImage
+                      value={item.media_url ?? ""}
+                      alt=""
+                      className="hidden w-full rounded-md border border-forest-deep/10 object-cover sm:block sm:aspect-[3/4]"
+                    />
                   </div>
                   <div className="min-w-0">
+
                     <h3 className="font-display text-xl leading-tight text-forest-deep sm:text-2xl">
                       {item.title}
                     </h3>
@@ -478,18 +558,11 @@ export function OfferSection() {
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <Reveal>
               <div className="mx-auto w-full max-w-xs overflow-hidden rounded-lg border border-cream/15 bg-forest-deep/40">
-                {field("teacher", "media_url", "") ? (
-                  <img
-                    src={field("teacher", "media_url", "")}
-                    alt={`Retrato do ${teacher.subtitle}`}
-                    loading="lazy"
-                    className="aspect-[4/5] w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex aspect-[4/5] items-center justify-center px-6 text-center text-xs text-cream/50">
-                    Espaço reservado para a fotografia do professor
-                  </div>
-                )}
+                <TeacherPhoto
+                  value={field("teacher", "media_url", "")}
+                  alt={`Retrato do ${teacher.subtitle}`}
+                />
+
               </div>
             </Reveal>
             <Reveal delay={80}>

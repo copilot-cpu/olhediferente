@@ -214,6 +214,17 @@ function AdminOfferPage() {
           onChange={(v) => setBlock(blockKey, { body: v })}
         />
         {Object.entries(data).map(([key, value]) => {
+          if (typeof value === "string" && key.endsWith("_url")) {
+            return (
+              <ImageField
+                key={key}
+                label={fieldLabel(key)}
+                folder="oferta"
+                value={value}
+                onChange={(v) => setData(blockKey, { [key]: v })}
+              />
+            );
+          }
           if (typeof value === "string") {
             return (
               <TextField
@@ -225,6 +236,7 @@ function AdminOfferPage() {
               />
             );
           }
+
           if (isStringArray(value)) {
             return (
               <StringListEditor
@@ -376,6 +388,13 @@ function AdminOfferPage() {
             value={b("phases").title ?? ""}
             onChange={(v) => setBlock("phases", { title: v })}
           />
+          <ImageField
+            label="Imagem de fundo do bloco"
+            folder="oferta"
+            value={str("phases", "background_url")}
+            onChange={(v) => setData("phases", { background_url: v })}
+          />
+
           <Repeater<Phase>
             items={((d("phases")["items"] as Phase[]) ?? []).slice()}
             onChange={(items) => setData("phases", { items })}
@@ -476,7 +495,8 @@ function AdminOfferPage() {
                   onChange={(items) => update({ items })}
                 />
                 <ImageField
-                  label="Imagem opcional"
+                  label="Imagem do presente"
+                  hint="Aparece na página apenas quando o presente está marcado como destaque."
                   folder="bonus"
                   value={item.media_url ?? ""}
                   onChange={(v) => update({ media_url: v })}
@@ -488,8 +508,9 @@ function AdminOfferPage() {
                     checked={Boolean(item.featured)}
                     onChange={(e) => update({ featured: e.target.checked })}
                   />
-                  Exibir como bônus de maior destaque
+                  Exibir como presente em destaque
                 </label>
+
               </>
             )}
           </Repeater>
@@ -534,6 +555,9 @@ function fieldLabel(key: string): string {
     brand: "Marca",
     brand_line: "Assinatura da marca",
     quote: "Frase",
+    background_url: "Imagem de fundo do bloco",
+    media_url: "Imagem ilustrativa do bloco",
+
   };
   return labels[key] ?? key.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
 }

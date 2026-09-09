@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AulaRouteImport } from './routes/aula'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as PreviaTokenRouteImport } from './routes/previa.$token'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminCaptacaoRouteImport } from './routes/_authenticated/admin.captacao'
 import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
@@ -47,6 +48,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const PreviaTokenRoute = PreviaTokenRouteImport.update({
+  id: '/previa/$token',
+  path: '/previa/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/previa/$token': typeof PreviaTokenRoute
   '/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
   '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
   '/admin/leads': typeof AuthenticatedAdminLeadsRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
+  '/previa/$token': typeof PreviaTokenRoute
   '/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
   '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
   '/admin/leads': typeof AuthenticatedAdminLeadsRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/aula': typeof AulaRoute
   '/auth': typeof AuthRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/previa/$token': typeof PreviaTokenRoute
   '/_authenticated/admin/captacao': typeof AuthenticatedAdminCaptacaoRoute
   '/_authenticated/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
   '/_authenticated/admin/leads': typeof AuthenticatedAdminLeadsRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/aula'
     | '/auth'
     | '/admin'
+    | '/previa/$token'
     | '/admin/captacao'
     | '/admin/configuracoes'
     | '/admin/leads'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/'
     | '/aula'
     | '/auth'
+    | '/previa/$token'
     | '/admin/captacao'
     | '/admin/configuracoes'
     | '/admin/leads'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/aula'
     | '/auth'
     | '/_authenticated/admin'
+    | '/previa/$token'
     | '/_authenticated/admin/captacao'
     | '/_authenticated/admin/configuracoes'
     | '/_authenticated/admin/leads'
@@ -200,6 +212,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AulaRoute: typeof AulaRoute
   AuthRoute: typeof AuthRoute
+  PreviaTokenRoute: typeof PreviaTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -238,6 +251,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/previa/$token': {
+      id: '/previa/$token'
+      path: '/previa/$token'
+      fullPath: '/previa/$token'
+      preLoaderRoute: typeof PreviaTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -348,6 +368,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AulaRoute: AulaRoute,
   AuthRoute: AuthRoute,
+  PreviaTokenRoute: PreviaTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
