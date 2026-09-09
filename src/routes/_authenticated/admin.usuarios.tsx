@@ -70,9 +70,9 @@ function AdminUsersPage() {
     });
 
   const createMutation = useMutation({
-    mutationFn: () => create({ data: { email, password } }),
-    onSuccess: () => {
-      setCreated({ email: email.trim().toLowerCase(), password });
+    mutationFn: (vars: { email: string; password: string }) => create({ data: vars }),
+    onSuccess: (_data, vars) => {
+      setCreated({ email: vars.email, password: vars.password });
       setFeedback({ type: "ok", message: "Acesso criado. Entregue os dados abaixo à pessoa." });
       setEmail("");
       setPassword(generatePassword());
