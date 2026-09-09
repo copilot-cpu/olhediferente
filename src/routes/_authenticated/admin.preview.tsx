@@ -53,7 +53,7 @@ function AdminOfferPreviewPage() {
         {tokenQuery.isLoading ? (
           <LoadingState />
         ) : tokenQuery.isError ? (
-          <ErrorState message="Não foi possível carregar o link." />
+          <ErrorState description="Não foi possível carregar o link." />
         ) : (
           <div className="space-y-4">
             <div className="break-all rounded-md border border-border/60 bg-muted/30 px-4 py-3 font-mono text-sm">
